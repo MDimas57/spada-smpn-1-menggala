@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Compact Repeater Style */
+.fi-repeater-compact .fi-section {
+    gap: 0 !important;
+}
+
+.fi-repeater-compact .fi-fieldset {
+    margin-bottom: 0 !important;
+}
+
+.fi-repeater-compact [role="group"] {
+    gap: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.fi-repeater-compact .fi-repeater-item {
+    border: none !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.fi-repeater-compact .fi-repeater-item>div {
+    gap: 0 !important;
+    margin: 0 !important;
+}
+
+/* Nilai card wrapper: show a single box containing all rows */
+.nilai-card {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+}
+
+/* Target common Filament repeater item selectors for compact rows */
+.fi-repeater-compact .filament-forms-repeater-item,
+.fi-repeater-compact .filament-forms-repeater-item>div,
+.fi-repeater-compact .fi-repeater-item,
+.fi-repeater-compact .fi-repeater-item>div {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    padding: .5rem 0 !important;
+    margin: 0 !important;
+}
+
+.fi-repeater-compact .filament-forms-repeater-item:last-child,
+.fi-repeater-compact .fi-repeater-item:last-child {
+    border-bottom: none !important;
+}
+
+/* Extra aggressive rules to remove boxes and spacing from Filament repeater items */
+.fi-repeater-compact .filament-forms-card,
+.fi-repeater-compact .filament-forms-repeater-item .filament-forms-card,
+.fi-repeater-compact .filament-forms-fieldset,
+.fi-repeater-compact .filament-forms-repeater-item .filament-forms-fieldset,
+.fi-repeater-compact .filament-forms-repeater-item .filament-forms-grid>div {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Make each repeater row align horizontally, no vertical gaps */
+.fi-repeater-compact .filament-forms-repeater-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    padding: .25rem 0 !important;
+}
+
+/* Inputs take full width of their column but no extra padding */
+.fi-repeater-compact .filament-forms-repeater-item .filament-forms-input-wrapper {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Reduce label spacing */
+.fi-repeater-compact label {
+    margin-bottom: 0.25rem !important;
+    font-size: .86rem !important;
+}

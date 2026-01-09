@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans text-gray-900 antialiased">
+        
+        <div id="global-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-md transition-opacity duration-300">
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 border-4 border-indigo-200 rounded-full animate-spin border-t-indigo-600"></div>
+                <span class="text-xs font-medium text-slate-600 animate-pulse">Memuat...</span>
+            </div>
+        </div>
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+                {{ $slot }}
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const loader = document.getElementById('global-loader');
+
+                window.addEventListener('load', function() {
+                    // --- PENGATURAN WAKTU (DELAY) ---
+                    const delayWaktu = 1000; // 1 detik
+
+                    setTimeout(() => {
+                        loader.classList.add('opacity-0', 'pointer-events-none');
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                        }, 300);
+                    }, delayWaktu);
+                });
+
+                // Tampilkan loader saat klik link
+                const links = document.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        const target = this.getAttribute('target');
+
+                        if (href && href !== '#' && href.startsWith('http') && target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                            loader.style.display = 'flex';
+                            setTimeout(() => {
+                                loader.classList.remove('opacity-0', 'pointer-events-none');
+                            }, 10);
+                        }
+                    });
+                });
+
+                // Tampilkan loader saat submit form (Penting untuk Login)
+                const forms = document.querySelectorAll('form');
+                forms.forEach(form => {
+                    form.addEventListener('submit', function() {
+                        loader.style.display = 'flex';
+                        setTimeout(() => {
+                            loader.classList.remove('opacity-0', 'pointer-events-none');
+                        }, 10);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
