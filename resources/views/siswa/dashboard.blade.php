@@ -1,215 +1,193 @@
-<!-- UPDATED dashboard.blade.php -->
 <x-app-layout>
-    <div class="min-h-screen py-12 bg-slate-50/50">
+    <div class="min-h-screen py-8 bg-gray-50 md:py-12">
         <div class="mx-auto space-y-8 max-w-7xl sm:px-6 lg:px-8">
 
-            <div class="relative overflow-hidden text-white shadow-xl rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 shadow-indigo-200">
-                <div class="absolute top-0 right-0 w-64 h-64 -mt-16 -mr-16 rounded-full bg-white/10 blur-3xl"></div>
-                <div class="absolute bottom-0 left-0 w-48 h-48 -mb-16 -ml-16 rounded-full bg-white/10 blur-2xl"></div>
+            <div class="relative overflow-hidden text-white shadow-lg rounded-2xl bg-gradient-to-r from-cyan-600 to-teal-700">
+                <div class="absolute top-0 right-0 w-64 h-64 -mt-10 -mr-10 rounded-full bg-white/10 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 -mb-5 -ml-5 rounded-full bg-white/10 blur-xl"></div>
 
-                <div class="relative p-8 md:p-10">
-                    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-center">
-                        <div>
-                            <h2 class="mb-2 text-3xl font-bold tracking-tight">
-                                Selamat datang, {{ Auth::user()->name }}! 👋
+                <div class="relative px-6 py-8 md:px-10 md:py-10">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-2 py-1 text-xs font-bold uppercase rounded bg-white/20 text-cyan-50">
+                                    Student Dashboard
+                                </span>
+                            </div>
+                            <h2 class="text-2xl font-bold tracking-tight md:text-3xl">
+                                Halo, {{ Auth::user()->name }}! 👋
                             </h2>
-                            <p class="max-w-2xl text-lg text-indigo-100">
-                                Siap untuk belajar hari ini? Berikut adalah aktivitas terbaru dan prioritas tugasmu.
+                            <p class="max-w-xl mt-2 text-cyan-50 text-opacity-90">
+                                Cek agenda belajarmu di sebelah kiri dan jadwal kalender di sebelah kanan.
                             </p>
                         </div>
-                        <div class="hidden text-right md:block">
-                            <p class="text-sm font-semibold tracking-wider text-indigo-200 uppercase">Hari ini</p>
-                            <p class="text-3xl font-bold">{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM') }}</p>
+
+                        <div class="mt-6 md:mt-0">
+                            <div class="px-6 py-3 text-center border rounded-xl bg-white/10 backdrop-blur-sm border-white/20">
+                                <span class="block text-xs font-medium tracking-wider uppercase text-cyan-100">Hari Ini</span>
+                                <span class="block text-xl font-bold text-white">
+                                    {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMM') }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                <!-- Calendar Section -->
-                <div class="lg:col-span-1">
-                    <x-siswa-calendar :tugasTimeline="$tugasTimeline" />
-                </div>
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
 
-                <!-- Timeline Section -->
-                <div class="lg:col-span-2">
-                    <div class="overflow-hidden bg-white border shadow-sm rounded-2xl border-slate-200">
-                        <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50/50">
-                            <h3 class="flex items-center gap-3 text-lg font-bold text-slate-800">
-                                <div class="p-2 text-indigo-600 bg-white border rounded-lg shadow-sm border-slate-100">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                Timeline Aktivitas & Tugas
-                            </h3>
-                            <span class="text-xs font-medium px-2.5 py-1 bg-slate-200 text-slate-600 rounded-full">
-                                {{ $tugasTimeline->count() }} Item
+                <div class="space-y-6 lg:col-span-8">
+
+                    <div class="flex items-center justify-between">
+                        <h3 class="flex items-center gap-2 text-lg font-bold text-gray-800">
+                            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            Tugas & Aktivitas Terbaru
+                        </h3>
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 text-xs font-medium text-teal-700 bg-white border border-teal-100 rounded-full shadow-sm">
+                                Semua ({{ $tugasTimeline->count() }})
                             </span>
                         </div>
+                    </div>
 
-                        <div class="divide-y divide-slate-100">
-                            @if($tugasTimeline->isEmpty())
-                                <div class="py-16 text-center">
-                                    <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 rounded-full bg-slate-50">
-                                        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                    </div>
-                                    <h4 class="text-lg font-medium text-slate-900">Semua Beres!</h4>
-                                    <p class="mt-1 text-slate-500">Tidak ada tugas atau kuis yang perlu dikerjakan saat ini.</p>
+                    <div class="space-y-4">
+                        @if($tugasTimeline->isEmpty())
+                            <div class="p-10 text-center bg-white border border-gray-300 border-dashed rounded-2xl">
+                                <div class="inline-flex items-center justify-center w-16 h-16 mb-4 text-gray-400 rounded-full bg-gray-50">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
-                            @else
-                                @foreach($tugasTimeline->take(3) as $item)
-                                    @php
-                                        $isTugas = $item->item_type === 'tugas';
+                                <h4 class="font-medium text-gray-900">Semua tugas selesai!</h4>
+                                <p class="text-sm text-gray-500">Nikmati waktu istirahatmu.</p>
+                            </div>
+                        @else
+                            @foreach($tugasTimeline->take(5) as $item) @php
+                                    $isTugas = $item->item_type === 'tugas';
+                                    $dueDate = $item->due_date;
+                                    $now = \Carbon\Carbon::now('Asia/Jakarta');
+                                    $isDone = !empty($item->is_done) && $item->is_done;
+                                    $isOverdue = $dueDate->lt($now);
 
-                                        // Ambil due_date (deadline atau created_at)
-                                        $dueDate = $item->due_date;
+                                    // LOGIC WARNA & STYLE
+                                    if ($isDone) {
+                                        $borderLeftClass = 'border-l-4 border-l-teal-500'; // Strip kiri Hijau
+                                        $bgBadge = 'bg-teal-50 text-teal-700 border-teal-100';
+                                        $statusText = 'Selesai';
+                                        $cardBg = 'bg-white opacity-75'; // Agak transparan kalau selesai
+                                    } elseif ($isOverdue) {
+                                        $borderLeftClass = 'border-l-4 border-l-red-500'; // Strip kiri Merah
+                                        $bgBadge = 'bg-red-50 text-red-700 border-red-100';
+                                        $statusText = 'Terlewat';
+                                        $cardBg = 'bg-white';
+                                    } else {
+                                        $borderLeftClass = 'border-l-4 border-l-orange-500'; // Strip kiri Orange
+                                        $bgBadge = 'bg-orange-50 text-orange-700 border-orange-100';
+                                        $statusText = 'Tenggat Segera';
+                                        $cardBg = 'bg-white shadow-sm hover:shadow-md transition-shadow';
+                                    }
+                                @endphp
 
-                                        // Gunakan timezone yang sama dengan config (Asia/Jakarta)
-                                        $now = \Carbon\Carbon::now('Asia/Jakarta');
+                                <div class="relative overflow-hidden rounded-xl border border-gray-100 p-5 {{ $cardBg }} {{ $borderLeftClass }}">
+                                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
 
-                                        // Tentukan status berdasarkan apakah sudah dikerjakan dan deadline
-                                        $isDone = !empty($item->is_done) && $item->is_done; // Sudah dikerjakan/dikumpulkan
-                                        $isOverdue = $dueDate->lt($now); // Deadline sudah lewat
-                                        $hoursUntilDeadline = $dueDate->diffInHours($now, false); // false = bisa negatif jika sudah lewat
-                                        $isUpcoming = $hoursUntilDeadline > 0 && $hoursUntilDeadline <= 24; // Dalam 24 jam ke depan
-
-                                        // Logic status:
-                                        // 1. Jika sudah dikerjakan → SELESAI (hijau)
-                                        // 2. Jika belum dikerjakan + deadline lewat → TERLEWAT (merah)
-                                        // 3. Jika belum dikerjakan + deadline belum lewat → TENGGAT SEGERA (kuning)
-                                        if ($isDone) {
-                                            $bgClass = 'bg-emerald-50';
-                                            $textClass = 'text-emerald-600';
-                                            $borderClass = 'border-emerald-100';
-                                            $badgeClass = 'bg-emerald-100 text-emerald-700';
-                                            $statusText = 'Selesai';
-                                        } elseif ($isOverdue) {
-                                            $bgClass = 'bg-rose-50';
-                                            $textClass = 'text-rose-600';
-                                            $borderClass = 'border-rose-100';
-                                            $badgeClass = 'bg-rose-100 text-rose-700';
-                                            $statusText = 'Terlewat';
-                                        } else {
-                                            $bgClass = 'bg-amber-50';
-                                            $textClass = 'text-amber-600';
-                                            $borderClass = 'border-amber-100';
-                                            $badgeClass = 'bg-amber-100 text-amber-700';
-                                            $statusText = 'Tenggat Segera';
-                                        }
-                                    @endphp
-
-                                    <div class="p-6 transition-colors duration-200 group hover:bg-slate-50">
-                                        <div class="flex flex-col gap-5 sm:flex-row">
-
-                                            <div class="flex-shrink-0">
-                                                <div class="flex items-center justify-center h-12 w-12 rounded-xl {{ $bgClass }} {{ $textClass }} border {{ $borderClass }}">
-                                                    @if($isTugas)
-                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                                        </svg>
-                                                    @else
-                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                        </svg>
-                                                    @endif
-                                                </div>
-                                            </div>
-
-                                            <div class="flex-1 min-w-0">
-                                                <div class="flex flex-col gap-2 mb-2 md:flex-row md:items-start md:justify-between">
-                                                    <div>
-                                                        <div class="flex items-center gap-2 mb-1">
-                                                            <span class="text-xs font-bold tracking-wider uppercase text-slate-500">
-                                                                {{ $item->mapel->nama ?? 'Umum' }}
-                                                            </span>
-                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badgeClass }}">
-                                                                {{ $statusText }}
-                                                            </span>
-                                                        </div>
-                                                        <h4 class="text-lg font-bold transition-colors text-slate-800 group-hover:text-indigo-600">
-                                                            {{ $item->judul ?? $item->pertanyaan }}
-                                                        </h4>
-                                                        @if(isset($item->guru))
-                                                            <p class="flex items-center gap-1 mt-1 text-sm text-slate-500">
-                                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                                                {{ $item->guru->user->name ?? 'Guru' }}
-                                                            </p>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="flex flex-row gap-3 mt-2 text-sm md:flex-col md:gap-1 text-slate-500 md:text-right md:items-end md:mt-0">
-                                                         @if($item->due_date)
-                                                            <div class="flex items-center gap-1.5 {{ $isOverdue ? 'text-rose-600 font-medium' : '' }}">
-                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                                {{ \Carbon\Carbon::parse($item->due_date)->format('d M, H:i') }}
-                                                            </div>
-                                                        @endif
-                                                        <div class="flex items-center gap-1.5 text-xs text-slate-400">
-                                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                            {{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                @if(isset($item->deskripsi))
-                                                    <div class="mb-4 text-sm prose-sm prose text-slate-600 line-clamp-2 max-w-none">
-                                                        {!! strip_tags($item->deskripsi) !!}
-                                                    </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="flex flex-col items-center justify-center w-16 h-16 text-center border border-gray-200 rounded-lg bg-gray-50">
+                                                @if($item->due_date)
+                                                    <span class="text-xs font-semibold text-gray-500 uppercase">{{ \Carbon\Carbon::parse($item->due_date)->format('M') }}</span>
+                                                    <span class="text-xl font-bold text-gray-800">{{ \Carbon\Carbon::parse($item->due_date)->format('d') }}</span>
+                                                @else
+                                                    <span class="text-xs text-gray-400">No Date</span>
                                                 @endif
-
-                                                <div class="flex items-center mt-3">
-                                                        @if(!empty($item->is_done) && $item->is_done)
-                                                            <span class="inline-flex items-center px-3 py-2 text-sm font-semibold bg-emerald-100 text-emerald-800 rounded-lg">
-                                                                Sudah mengerjakan
-                                                            </span>
-                                                            <a href="{{ route('siswa.modul.show', $item->modul_id) }}" class="ml-3 text-sm font-medium text-indigo-600 hover:underline">Lihat</a>
-                                                        @else
-                                                            @if($isOverdue)
-                                                                <button class="inline-flex items-center px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-200 rounded-lg w-full sm:w-auto justify-center cursor-not-allowed" disabled>
-                                                                    Waktu Habis
-                                                                </button>
-                                                                <a href="{{ route('siswa.modul.show', $item->modul_id) }}" class="ml-3 text-sm font-medium text-indigo-600 hover:underline">Lihat</a>
-                                                            @else
-                                                                @if($isTugas)
-                                                                    <a href="{{ route('siswa.modul.show', $item->modul_id) }}"
-                                                                       class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 w-full sm:w-auto justify-center">
-                                                                        Kerjakan Tugas
-                                                                        <svg class="w-4 h-4 transition-transform ms-2 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                                                        </svg>
-                                                                    </a>
-                                                                @else
-                                                                    <a href="{{ route('siswa.kuis.kerjakan', $item->id) }}"
-                                                                       class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 w-full sm:w-auto justify-center">
-                                                                        Mulai Kuis
-                                                                        <svg class="w-4 h-4 transition-transform ms-2 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                                        </svg>
-                                                                    </a>
-                                                                @endif
-                                                            @endif
-                                                        @endif
-                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
 
-                        @if($tugasTimeline->count() > 3)
-                        <div class="px-6 py-4 text-center border-t border-slate-100 bg-slate-50/50">
-                            <a href="#" class="text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-800">
-                                Lihat Semua Aktivitas ({{ $tugasTimeline->count() - 4 }} lainnya) &rarr;
-                            </a>
-                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="text-xs font-bold tracking-wide text-gray-500 uppercase">{{ $item->mapel->nama ?? 'Umum' }}</span>
+                                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border {{ $bgBadge }}">
+                                                            {{ $statusText }}
+                                                        </span>
+                                                    </div>
+                                                    <h4 class="text-lg font-bold text-gray-800 line-clamp-1 group-hover:text-teal-600">
+                                                        {{ $item->judul ?? $item->pertanyaan }}
+                                                    </h4>
+                                                </div>
+                                            </div>
+
+                                            @if(isset($item->guru))
+                                                <p class="flex items-center gap-1 mt-1 text-sm text-gray-500">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+                                                    Oleh: {{ $item->guru->user->name ?? 'Guru' }}
+                                                </p>
+                                            @endif
+                                        </div>
+
+                                        <div class="self-center flex-shrink-0 mt-2 sm:mt-0">
+                                             @if(!empty($item->is_done) && $item->is_done)
+                                                <a href="{{ route('siswa.modul.show', $item->modul_id) }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-teal-600 transition-colors rounded-lg bg-teal-50 hover:bg-teal-100">
+                                                    Lihat Hasil
+                                                </a>
+                                            @else
+                                                @if($isOverdue)
+                                                    <span class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">
+                                                        Ditutup
+                                                    </span>
+                                                @else
+                                                    @if($isTugas)
+                                                        <a href="{{ route('siswa.modul.show', $item->modul_id) }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-bold text-white shadow-sm bg-teal-600 rounded-lg hover:bg-teal-700 transition-all hover:-translate-y-0.5">
+                                                            Kerjakan
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('siswa.kuis.kerjakan', $item->id) }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-bold text-white shadow-sm bg-cyan-600 rounded-lg hover:bg-cyan-700 transition-all hover:-translate-y-0.5">
+                                                            Mulai Kuis
+                                                        </a>
+                                                    @endif
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            @if($tugasTimeline->count() > 5)
+                                <div class="mt-4 text-center">
+                                    <a href="#" class="text-sm font-semibold text-teal-600 hover:text-teal-800">
+                                        Lihat Semua Aktivitas &rarr;
+                                    </a>
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>
+
+                <div class="space-y-6 lg:col-span-4">
+
+                    <div class="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-2xl">
+                        <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">
+                            <h3 class="text-sm font-bold tracking-wider text-gray-700 uppercase">Kalender Akademik</h3>
+                        </div>
+                        <div class="p-4">
+                            <x-siswa-calendar :tugasTimeline="$tugasTimeline" />
+                        </div>
+                    </div>
+
+                    <div class="p-5 text-white shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl">
+                        <h4 class="mb-4 text-xs font-bold tracking-widest text-gray-300 uppercase">Ringkasan</h4>
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-teal-400">{{ $tugasTimeline->where('is_done', 1)->count() }}</div>
+                                <div class="mt-1 text-xs text-gray-400">Selesai</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-orange-400">{{ $tugasTimeline->where('is_done', 0)->where('due_date', '>', now())->count() }}</div>
+                                <div class="mt-1 text-xs text-gray-400">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
