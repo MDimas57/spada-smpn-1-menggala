@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login - SMA Negeri 1 Negeri Katon</title>
+        <title>Login - SMP Negeri 1 Menggala</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <style>
@@ -12,8 +12,9 @@
             :root {
                 --bg-body: #f3f4f6;
                 --bg-card: #ffffff;
-                --primary: #4f46e5; /* Indigo/Biru sesuai dashboard */
-                --primary-dark: #4338ca; /* Varian gelap untuk hover */
+                /* Diganti ke Teal-600 dan Teal-700 */
+                --primary: #0d9488; 
+                --primary-dark: #0f766e; 
                 --danger: #dc2626;
                 --text-dark: #1f2937;
                 --text-gray: #6b7280;
@@ -76,6 +77,7 @@
                 line-height: 1.1;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
+                /* Gradient Teal */
                 background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
@@ -117,7 +119,7 @@
                 margin: 0 auto;
             }
 
-            /* Ikon Indigo Mengambang */
+            /* Ikon Teal Mengambang */
             .floating-icon {
                 background-color: var(--primary);
                 width: 60px;
@@ -132,7 +134,8 @@
                 top: -30px;
                 left: 50%;
                 transform: translateX(-50%);
-                box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+                /* Shadow Teal */
+                box-shadow: 0 5px 15px rgba(13, 148, 136, 0.3);
                 z-index: 5;
             }
 
@@ -194,7 +197,8 @@
 
             .form-control:focus {
                 border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+                /* Shadow Fokus Teal */
+                box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
             }
 
             /* Placeholder styling */
@@ -202,7 +206,7 @@
                 color: var(--text-gray);
             }
 
-            /* Tombol Submit Indigo */
+            /* Tombol Submit Teal */
             .btn-submit {
                 width: 100%;
                 background-color: var(--primary);
@@ -216,7 +220,8 @@
                 text-transform: uppercase;
                 margin-top: 10px;
                 transition: background 0.3s;
-                box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+                /* Shadow Tombol Teal */
+                box-shadow: 0 4px 6px rgba(13, 148, 136, 0.2);
             }
 
             .btn-submit:hover {
@@ -448,33 +453,28 @@
                 }
 
                 .main-content {
-                    padding: 15px 12px;
+                    padding: 10px;
                     min-height: calc(100vh - 110px);
                 }
 
                 .login-card {
-                    padding: 40px 18px 20px 18px;
+                    padding: 35px 15px 15px 15px;
                 }
 
                 .floating-icon {
-                    width: 50px;
-                    height: 50px;
-                    top: -25px;
-                    font-size: 22px;
+                    width: 45px;
+                    height: 45px;
+                    top: -22px;
+                    font-size: 20px;
                 }
 
                 .login-title {
-                    font-size: 16px;
-                }
-
-                .login-subtitle {
-                    font-size: 10px;
-                    margin-bottom: 18px;
+                    font-size: 15px;
                 }
 
                 .form-control {
-                    padding: 12px 14px;
-                    font-size: 13px;
+                    padding: 11px 12px;
+                    font-size: 12px;
                 }
 
                 .btn-submit {
@@ -503,31 +503,6 @@
                 .logo-text .subtitle {
                     font-size: 7px;
                 }
-
-                .main-content {
-                    padding: 10px;
-                    min-height: calc(100vh - 100px);
-                }
-
-                .login-card {
-                    padding: 35px 15px 15px 15px;
-                }
-
-                .floating-icon {
-                    width: 45px;
-                    height: 45px;
-                    top: -22px;
-                    font-size: 20px;
-                }
-
-                .login-title {
-                    font-size: 15px;
-                }
-
-                .form-control {
-                    padding: 11px 12px;
-                    font-size: 12px;
-                }
             }
         </style>
     </head>
@@ -535,11 +510,11 @@
 
         <div class="header-logo">
             <a href="{{ route('dashboard') }}" class="inline-flex items-center">
-                <x-application-logo style="height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));" />
+                <x-application-logo style="height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));" class="text-teal-600" />
             </a>
 
             <div class="logo-text">
-                <h1>SMA Negeri 1 Negeri Katon</h1>
+                <h1>SMP Negeri 1 Menggala</h1>
                 <div class="subtitle">Sistem Pembelajaran Dalam Jaringan</div>
             </div>
         </div>
@@ -550,7 +525,6 @@
                     <i class="fas fa-graduation-cap"></i>
                 </div>
                 <h2 class="login-title">Portal Pembelajaran</h2>
-                <!-- Session Status -->
                 <x-auth-session-status class="mb-4" :status="session('status')" />
 
                 <form method="POST" action="{{ route('login') }}">
@@ -611,7 +585,7 @@
 
         <div class="footer-copyright">
             <small>
-                &copy; {{ date('Y') }}, SMA Negeri 1 Negeri Katon. All rights reserved.
+                &copy; {{ date('Y') }}, SMP Negeri 1 Menggala. All rights reserved.
             </small>
         </div>
 
