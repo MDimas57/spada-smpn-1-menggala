@@ -10,10 +10,11 @@ class ListEskuls extends ListRecords
 {
     protected static string $resource = EskulResource::class;
 
-    protected function getHeaderActions(): array
+     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Ekstrakurikuler'),
         ];
     }
 }

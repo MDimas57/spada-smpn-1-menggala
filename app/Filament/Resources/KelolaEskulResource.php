@@ -18,7 +18,7 @@ class KelolaEskulResource extends Resource
 
     protected static ?string $slug = 'kelola-eskul';
     protected static ?string $navigationLabel = 'Kelola Ekstrakurikuler';
-    protected static ?string $modelLabel = 'Kelola Eskul';
+    protected static ?string $pluralLabel = 'Kelola Ekstrakurikuler';
     protected static ?string $navigationGroup = 'Kesiswaan';
     protected static ?string $navigationIcon = 'heroicon-o-trophy';
 

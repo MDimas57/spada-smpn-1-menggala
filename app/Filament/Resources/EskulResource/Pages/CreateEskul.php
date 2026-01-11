@@ -9,4 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateEskul extends CreateRecord
 {
     protected static string $resource = EskulResource::class;
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); 
+    }
 }

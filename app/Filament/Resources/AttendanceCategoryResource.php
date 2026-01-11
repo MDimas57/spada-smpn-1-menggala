@@ -17,8 +17,10 @@ class AttendanceCategoryResource extends Resource
 {
     protected static ?string $navigationGroup = 'Absensi';
     protected static ?string $model = AttendanceCategory::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Kategori Absensi';
+    protected static ?string $pluralLabel = 'Kategori Absensi';
+    protected static ?string $modelLabel = 'Kategori Absensi';
 
     // Kontrol visibility menu berdasarkan role
     public static function shouldRegisterNavigation(): bool

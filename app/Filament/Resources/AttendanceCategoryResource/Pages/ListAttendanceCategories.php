@@ -9,11 +9,12 @@ use Filament\Resources\Pages\ListRecords;
 class ListAttendanceCategories extends ListRecords
 {
     protected static string $resource = AttendanceCategoryResource::class;
-
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Kategori Absensi'),
         ];
     }
+
 }

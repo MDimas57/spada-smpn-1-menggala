@@ -15,6 +15,9 @@ class GuruResource extends Resource
     protected static ?string $model = Guru::class;
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'User Management';
+     protected static ?string $navigationLabel = 'Kelola Guru';
+    protected static ?string $pluralLabel = 'Kelola Guru';
+    protected static ?string $modelLabel = 'Kelola Guru';
     protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool
