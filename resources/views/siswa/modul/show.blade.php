@@ -4,7 +4,7 @@
             <div class="flex flex-col justify-between gap-4 md:flex-row md:items-start">
                 <div class="flex-1">
                     <div class="flex items-center gap-2 mb-3">
-                        <a href="{{ $modul->course ? route('siswa.course.show', $modul->course) : route('siswa.my-courses') }}" 
+                        <a href="{{ $modul->course ? route('siswa.course.show', $modul->course) : route('siswa.my-courses') }}"
                            class="flex items-center gap-1 text-sm font-medium text-gray-400 transition-colors hover:text-teal-600">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                             Kembali
@@ -105,13 +105,13 @@
                                     </div>
 
                                     <div class="flex w-full gap-2 mt-2 sm:w-auto sm:mt-0">
-                                        @if($materi->tipe == 'pdf' || $materi->tipe == 'video' || $materi->tipe == 'link')
-                                            <button onclick="openPreview('{{ $materi->tipe }}', '{{ $materi->tipe == 'link' ? $materi->url : Storage::url($materi->file_path) }}', '{{ $materi->judul }}')"
+                                        {{-- @if($materi->tipe == 'pdf' || $materi->tipe == 'video' || $materi->tipe == 'link')
+                        <button onclick="openPreview(@json($materi->tipe), @json($materi->tipe == 'link' ? $materi->url : Storage::url($materi->file_path)), @json($materi->judul))"
                                                     class="inline-flex items-center justify-center flex-1 px-4 py-2 text-sm font-medium text-gray-700 transition-all bg-white border border-gray-200 rounded-lg shadow-sm sm:flex-none hover:bg-gray-50 hover:text-teal-600 hover:border-teal-200">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                                 Preview
                                             </button>
-                                        @endif
+                                        @endif --}}
 
                                         @if($materi->tipe == 'link')
                                             <a href="{{ $materi->url }}" target="_blank" class="inline-flex items-center justify-center flex-1 px-4 py-2 text-sm font-medium transition-colors border rounded-lg shadow-sm sm:flex-none border-sky-200 text-sky-700 bg-sky-50 hover:bg-sky-100">
@@ -217,7 +217,7 @@
                                                 @endif
                                             </div>
                                         @else
-                                            <form action="{{ route('siswa.tugas.upload', $tugas->id) }}" method="POST" enctype="multipart/form-data" 
+                                            <form action="{{ route('siswa.tugas.upload', $tugas->id) }}" method="POST" enctype="multipart/form-data"
                                                   class="p-8 text-center transition-all border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 hover:bg-white hover:border-teal-400 hover:shadow-md group">
                                                 @csrf
                                                 <div class="space-y-4">
@@ -406,16 +406,12 @@
 
             titleEl.textContent = title;
 
-            if (type === 'pdf' && window.pdfjsLib) {
-                // PDF.js viewer
+            if (type === 'pdf') {
+                // Simpler PDF preview using iframe — more robust across local setups
                 content.innerHTML = `
                     <div class="flex flex-col w-full gap-4">
                         <div class="flex items-center justify-between p-3 bg-white border border-gray-200 shadow-sm rounded-xl">
-                            <div class="flex items-center gap-2">
-                                <button id="pdf-prev" class="px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200">Prev</button>
-                                <span id="pdf-page-info" class="mx-2 text-sm font-semibold text-gray-600"></span>
-                                <button id="pdf-next" class="px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200">Next</button>
-                            </div>
+                            <div class="text-sm font-medium text-gray-700">PDF Preview</div>
                             <div>
                                 <a id="pdf-download" href="${url}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-bold text-white transition-colors bg-teal-600 rounded-lg shadow-sm hover:bg-teal-700">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -423,74 +419,11 @@
                                 </a>
                             </div>
                         </div>
-                        <div id="pdf-loading" class="w-full py-12 font-medium text-center text-gray-500">Memuat dokumen...</div>
-                        <div class="flex items-center justify-center w-full p-4 overflow-auto bg-gray-200 rounded-xl" style="min-height:500px;">
-                            <canvas id="pdf-canvas" class="hidden rounded-lg shadow-lg" style="max-width:100%;"></canvas>
+                        <div class="w-full p-4 bg-gray-200 rounded-xl" style="min-height:500px;">
+                            <iframe src="${url}" class="w-full h-[70vh] border-0 rounded-lg bg-white"></iframe>
                         </div>
                     </div>
                 `;
-
-                const canvas = document.getElementById('pdf-canvas');
-                const ctx = canvas.getContext('2d');
-                const loadingEl = document.getElementById('pdf-loading');
-                let pdfDoc = null;
-                let currentPage = 1;
-                let totalPages = 0;
-
-                const renderPage = (num) => {
-                    pdfDoc.getPage(num).then(function(page) {
-                        const viewport = page.getViewport({ scale: 1 });
-                        const containerWidth = Math.min(window.innerWidth * 0.8, 1000);
-                        const scale = containerWidth / viewport.width;
-                        const scaledViewport = page.getViewport({ scale });
-                        canvas.height = scaledViewport.height;
-                        canvas.width = scaledViewport.width;
-                        canvas.classList.remove('hidden');
-
-                        const renderContext = {
-                            canvasContext: ctx,
-                            viewport: scaledViewport,
-                        };
-                        page.render(renderContext).promise.then(function() {
-                            document.getElementById('pdf-page-info').textContent = `Hal ${num} / ${totalPages}`;
-                        });
-                    }).catch(function(err) {
-                        loadingEl.textContent = 'Gagal merender halaman: ' + err.message;
-                    });
-                };
-
-                (async function() {
-                    try {
-                        const res = await fetch(encodeURI(url));
-                        if (!res.ok) throw new Error('HTTP ' + res.status);
-                        const data = await res.arrayBuffer();
-                        const loadingTask = pdfjsLib.getDocument({ data });
-                        pdfDoc = await loadingTask.promise;
-                        totalPages = pdfDoc.numPages;
-                        loadingEl.style.display = 'none';
-                        renderPage(currentPage);
-
-                        document.getElementById('pdf-prev').addEventListener('click', function() {
-                            if (currentPage <= 1) return;
-                            currentPage--;
-                            renderPage(currentPage);
-                        });
-                        document.getElementById('pdf-next').addEventListener('click', function() {
-                            if (currentPage >= totalPages) return;
-                            currentPage++;
-                            renderPage(currentPage);
-                        });
-                    } catch (err) {
-                        loadingEl.innerHTML = `<div class="text-red-600">Tidak dapat memuat preview. <a href="${url}" target="_blank" class="text-teal-600 underline">Buka di tab baru</a></div>`;
-                        console.error('PDF preview error:', err);
-                        try {
-                            const iframe = document.createElement('iframe');
-                            iframe.src = url;
-                            iframe.className = 'w-full h-96 border-0 rounded-lg bg-white';
-                            loadingEl.parentNode.appendChild(iframe);
-                        } catch (e) {}
-                    }
-                })();
 
             } else if (type === 'video') {
                 content.innerHTML = `

@@ -35,6 +35,7 @@ class MaterisRelationManager extends RelationManager
                 Forms\Components\FileUpload::make('file_path')
                     ->label('Upload File')
                     ->directory('materi-files')
+                    ->disk('public')
                     ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'video/mp4'])
                     ->visible(fn (Forms\Get $get) => in_array($get('tipe'), ['pdf', 'file', 'video'])),
 
