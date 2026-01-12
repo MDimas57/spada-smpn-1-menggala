@@ -12,16 +12,16 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        
+    <body class="font-sans antialiased text-gray-900">
+
         <div id="global-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-md transition-opacity duration-300">
             <div class="flex flex-col items-center gap-2">
                 <div class="w-10 h-10 border-4 border-indigo-200 rounded-full animate-spin border-t-indigo-600"></div>
                 <span class="text-xs font-medium text-slate-600 animate-pulse">Memuat...</span>
             </div>
         </div>
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div class="flex flex-col items-center min-h-screen pt-6 bg-gray-100 sm:justify-center sm:pt-0">
+            <div class="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md sm:rounded-lg">
                 {{ $slot }}
             </div>
         </div>
@@ -31,8 +31,7 @@
                 const loader = document.getElementById('global-loader');
 
                 window.addEventListener('load', function() {
-                    // --- PENGATURAN WAKTU (DELAY) ---
-                    const delayWaktu = 1000; // 1 detik
+                    const delayWaktu = 1000;
 
                     setTimeout(() => {
                         loader.classList.add('opacity-0', 'pointer-events-none');
@@ -42,7 +41,6 @@
                     }, delayWaktu);
                 });
 
-                // Tampilkan loader saat klik link
                 const links = document.querySelectorAll('a');
                 links.forEach(link => {
                     link.addEventListener('click', function(e) {
@@ -58,7 +56,6 @@
                     });
                 });
 
-                // Tampilkan loader saat submit form (Penting untuk Login)
                 const forms = document.querySelectorAll('form');
                 forms.forEach(form => {
                     form.addEventListener('submit', function() {
