@@ -16,6 +16,7 @@ class NilaiUjianResource extends Resource
 
     protected static ?string $navigationGroup = 'Pengelolaan Nilai Siswa';
     protected static ?string $navigationLabel = 'Data Nilai (UTS/UAS)';
+    protected static ?string $pluralLabel = 'Nilai Ujian';
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
     protected static ?int $navigationSort = 5;
 

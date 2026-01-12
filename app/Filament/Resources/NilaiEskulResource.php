@@ -21,7 +21,8 @@ class NilaiEskulResource extends Resource
     protected static ?string $model = NilaiEskul::class;
 
     protected static ?string $navigationGroup = 'Pengelolaan Nilai Siswa';
-    protected static ?string $navigationLabel = 'Input Nilai Eskul';
+    protected static ?string $navigationLabel = 'Input Nilai Ekskul';
+    protected static ?string $pluralLabel = 'Nilai Ekstrakurikuler';
     protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static ?int $navigationSort = 5;
 

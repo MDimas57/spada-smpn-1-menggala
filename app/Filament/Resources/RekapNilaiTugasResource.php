@@ -20,6 +20,8 @@ class RekapNilaiTugasResource extends Resource
 
     protected static ?string $navigationGroup = 'Pengelolaan Nilai Siswa';
     protected static ?string $navigationLabel = 'Rekap Nilai Tugas';
+     protected static ?string $pluralLabel = 'Daftar Siswa';
+
     protected static ?string $navigationIcon = 'heroicon-o-calculator';
     protected static ?string $slug = 'rekap-nilai-tugas';
 

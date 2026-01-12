@@ -16,6 +16,9 @@ class MapelResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $navigationGroup = 'Master Data';
+    protected static ?string $navigationLabel = 'Kelola Mata Pelajaran';
+    protected static ?string $pluralLabel = 'Kelola Mata Pelajaran';
+    protected static ?string $modelLabel = 'Kelola Mata Pelajaran';
     protected static ?int $navigationSort = 3;
 
     public static function canViewAny(): bool

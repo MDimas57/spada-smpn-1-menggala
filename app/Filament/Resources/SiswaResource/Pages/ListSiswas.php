@@ -9,11 +9,11 @@ use Filament\Resources\Pages\ListRecords;
 class ListSiswas extends ListRecords
 {
     protected static string $resource = SiswaResource::class;
-
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Siswa'),
         ];
     }
 }

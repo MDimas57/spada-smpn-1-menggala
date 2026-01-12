@@ -9,4 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMapel extends CreateRecord
 {
     protected static string $resource = MapelResource::class;
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); 
+    }
 }

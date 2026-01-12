@@ -17,6 +17,9 @@ class TahunAjaranResource extends Resource
     // Icon menu di sidebar
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
     protected static ?string $navigationGroup = 'Master Data';
+    protected static ?string $navigationLabel = 'Tahun Ajaran';
+    protected static ?string $pluralLabel = 'Tahun Ajaran';
+    protected static ?string $modelLabel = 'Tahun Ajaran';
     protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool

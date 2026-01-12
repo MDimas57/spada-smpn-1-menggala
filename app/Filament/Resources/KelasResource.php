@@ -16,6 +16,9 @@ class KelasResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-home-modern';
     protected static ?string $navigationGroup = 'Master Data';
+    protected static ?string $navigationLabel = 'Kelola Kelas';
+    protected static ?string $pluralLabel = 'Kelola Kelas';
+    protected static ?string $modelLabel = 'Kelola Kelas';
     protected static ?int $navigationSort = 2;
 
     public static function canViewAny(): bool

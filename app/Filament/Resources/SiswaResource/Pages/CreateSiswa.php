@@ -44,4 +44,12 @@ class CreateSiswa extends CreateRecord
 
         return $data;
     }
+      protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make()
+                ->label('Tambah Wali Kelas'),
+        ];
+    }
+
 }
