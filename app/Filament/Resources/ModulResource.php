@@ -20,6 +20,9 @@ class ModulResource extends Resource
     protected static ?string $model = Modul::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Akademik';
+     protected static ?string $navigationLabel = 'Modul';
+    protected static ?string $pluralLabel = 'Modul';
+    protected static ?string $modelLabel = 'Modul';
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form

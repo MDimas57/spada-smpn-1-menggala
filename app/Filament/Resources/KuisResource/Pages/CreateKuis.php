@@ -9,4 +9,5 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateKuis extends CreateRecord
 {
     protected static string $resource = KuisResource::class;
+    
 }
