@@ -2,6 +2,11 @@
 
 namespace App\Providers\Filament;
 
+// --- Import Custom Login & Helper ---
+use App\Filament\Auth\CustomLogin;
+use Illuminate\Support\Facades\Blade;
+// ------------------------------------
+
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -24,8 +29,7 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        // register a render hook that injects a compact notification icon next to the user menu
-        // this will render the Blade partial `filament.partials.header-notifications`
+        // Tetap pertahankan notifikasi header Anda
         FilamentView::registerRenderHook(
             PanelsRenderHook::USER_MENU_BEFORE,
             fn () => view('filament.partials.header-notifications')
@@ -35,20 +39,94 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            // Menggunakan Class Login Custom
+            ->login(CustomLogin::class)
+            ->brandLogo(fn () => view('filament.admin.logo')) // Gunakan brandLogo, bukan brandView
+            ->brandLogoHeight('5rem') // Penting! Atur tinggi agar logo & teks tidak terpotong (defaultnya kecil)
+            // --- CUSTOM CSS: BACKGROUND IMAGE LOKAL & GLASSMORPHISM ---
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => Blade::render(<<<'HTML'
+                    <style>
+                        /* Background Image dari Local Public Folder */
+                        body {
+                            /* Memanggil public/images/login-bg.jpg */
+                            background-image: url('{{ asset("images/logo-sekolah.png") }}'); 
+                            background-size: cover;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-attachment: fixed;
+                        }
+                        
+                        /* Overlay Gelap Transparan (Supaya tulisan terbaca) */
+                        body::before {
+                            content: "";
+                            position: absolute;
+                            top: 0; left: 0; width: 100%; height: 100%;
+                            background: rgba(0, 0, 0, 0.5); /* Atur kegelapan di sini (0.1 - 0.9) */
+                            z-index: -1;
+                        }
+
+                        /* Kartu Login Glassmorphism (Transparan & Blur) */
+                        .fi-simple-main {
+                            background-color: rgba(255, 255, 255, 0.85) !important; /* Putih 85% */
+                            backdrop-filter: blur(10px); /* Efek Blur */
+                            -webkit-backdrop-filter: blur(10px);
+                            border-radius: 1.5rem !important;
+                            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important;
+                            padding: 3rem !important;
+                            max-width: 480px !important;
+                            border: 1px solid rgba(255, 255, 255, 0.3);
+                        }
+                        
+                        /* Judul Halaman (Sign In) */
+                        .fi-simple-header-heading {
+                            color: #1f2937 !important; /* Warna text gelap */
+                            font-weight: 800 !important;
+                        }
+
+                        /* Mempercantik Tombol Sign In */
+                        button[type="submit"] {
+                            background: linear-gradient(to right, #d97706, #fbbf24) !important; /* Gradasi Orange */
+                            border: none !important;
+                            font-weight: bold !important;
+                            letter-spacing: 0.5px;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.4);
+                        }
+                        
+                        button[type="submit"]:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.5);
+                        }
+                    </style>
+                HTML)
+            )
+            // ---------------------------------------------------------
+
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->sidebarCollapsibleOnDesktop() // ✅ Menambahkan fitur collapse sidebar
+            ->sidebarCollapsibleOnDesktop() // Fitur sidebar collapse tetap ada
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            
+            // Daftar Widgets Spesifik Anda
             ->widgets([
-                // Widgets default telah dihapus dari sini
+                \App\Filament\Widgets\TahunAjaranInfoWidget::class,
+                \App\Filament\Widgets\AdminStatsWidget::class,
+                \App\Filament\Widgets\GuruStatsWidget::class,
+                \App\Filament\Widgets\SiswaPerKelasChart::class,
+                \App\Filament\Widgets\CourseStatusChart::class,
+                \App\Filament\Widgets\JadwalHariIniWidget::class,
+                \App\Filament\Widgets\LatestActivitiesWidget::class,
+                \App\Filament\Widgets\TugasBelumDikoreksiWidget::class,
             ])
+            
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -59,16 +137,6 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ])
-            ->widgets([
-                \App\Filament\Widgets\TahunAjaranInfoWidget::class,
-                \App\Filament\Widgets\AdminStatsWidget::class,
-                \App\Filament\Widgets\GuruStatsWidget::class,
-                \App\Filament\Widgets\SiswaPerKelasChart::class,
-                \App\Filament\Widgets\CourseStatusChart::class,
-                \App\Filament\Widgets\JadwalHariIniWidget::class,
-                \App\Filament\Widgets\LatestActivitiesWidget::class,
-                \App\Filament\Widgets\TugasBelumDikoreksiWidget::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
