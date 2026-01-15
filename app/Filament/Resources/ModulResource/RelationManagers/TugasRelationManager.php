@@ -25,10 +25,22 @@ class TugasRelationManager extends RelationManager
                 Forms\Components\RichEditor::make('instruksi')
                     ->label('Instruksi Tugas')
                     ->columnSpanFull(),
-
                 Forms\Components\DateTimePicker::make('deadline')
                     ->label('Batas Pengumpulan')
                     ->required(),
+
+                // Lampiran tugas (opsional)
+                Forms\Components\FileUpload::make('file_path')
+                    ->label('Lampiran Tugas (PDF / DOC / DOCX)')
+                    ->directory('tugas-files')
+                    ->disk('public')
+                    ->acceptedFileTypes([
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    ])
+                    ->maxSize(10240)
+                    ->helperText('Opsional. Maks 10MB.'),
             ]);
     }
 

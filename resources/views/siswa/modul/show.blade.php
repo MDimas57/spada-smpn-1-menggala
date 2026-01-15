@@ -166,6 +166,14 @@
                                                     Deadline: {{ $tugas->deadline ? $tugas->deadline->format('d M Y, H:i') : 'Tidak ada' }}
                                                 </span>
                                             </div>
+                                            @if($tugas->file_path)
+                                                <div class="mt-3">
+                                                    <a href="{{ Storage::url($tugas->file_path) }}" target="_blank" class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                        Lihat Lampiran Tugas
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="flex-shrink-0">
                                             @if($isSubmitted)
@@ -250,7 +258,7 @@
                                                                         <div id="fileMeta-{{ $tugas->id }}" class="mt-1 text-xs text-gray-500"></div>
                                                                     </div>
                                                                     <div class="flex items-center gap-2">
-                                                                        <button type="button" id="viewFile-{{ $tugas->id }}" class="inline-flex items-center hidden px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded hover:bg-blue-700" target="_blank">
+                                                                        <button type="button" id="viewFile-{{ $tugas->id }}" class="hidden px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded hover:bg-blue-700" target="_blank">
                                                                             Lihat
                                                                         </button>
                                                                         <button type="button" id="removeFile-{{ $tugas->id }}" class="inline-flex items-center px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded hover:bg-gray-200">
@@ -315,23 +323,26 @@
                                                         // Reset thumb content
                                                         thumb.innerHTML = '';
 
-                                                        if (file.type.startsWith('image/')) {
+                                                            if (file.type.startsWith('image/')) {
                                                             const img = document.createElement('img');
                                                             img.src = url;
                                                             img.className = 'object-cover w-full h-full';
                                                             img.alt = file.name;
                                                             thumb.appendChild(img);
                                                             viewBtn.classList.remove('hidden');
+                                                            viewBtn.classList.add('inline-flex');
                                                             viewBtn.onclick = () => window.open(url, '_blank');
                                                         } else if (file.type === 'application/pdf') {
                                                             // show pdf icon and enable view
                                                             thumb.innerHTML = '<svg class="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 8v12a2 2 0 002 2h12a2 2 0 002-2V8l-8-6zM8 20v-8h8v8H8z"/></svg>';
                                                             viewBtn.classList.remove('hidden');
+                                                            viewBtn.classList.add('inline-flex');
                                                             viewBtn.onclick = () => window.open(url, '_blank');
                                                         } else {
                                                             // generic file icon
                                                             thumb.innerHTML = '<svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7v10M17 7v10M3 7h18M3 17h18"/></svg>';
                                                             viewBtn.classList.add('hidden');
+                                                            viewBtn.classList.remove('inline-flex');
                                                             viewBtn.onclick = null;
                                                         }
 
@@ -353,6 +364,7 @@
                                                         fileMetaEl.textContent = '';
                                                         fileNote.textContent = '';
                                                         viewBtn.classList.add('hidden');
+                                                        viewBtn.classList.remove('inline-flex');
                                                         viewBtn.onclick = null;
                                                         previewWrap.classList.add('hidden');
                                                     }

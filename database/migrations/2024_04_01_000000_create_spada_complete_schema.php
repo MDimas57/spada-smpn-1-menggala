@@ -92,6 +92,7 @@ return new class extends Migration {
             $table->foreignId('modul_id')->constrained('moduls')->onDelete('cascade');
             $table->string('judul');
             $table->text('instruksi')->nullable();
+            $table->string('file_path')->nullable();
             $table->dateTime('deadline')->nullable();
             $table->timestamps();
         });
