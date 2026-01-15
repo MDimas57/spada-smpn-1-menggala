@@ -11,7 +11,7 @@
                             SMP Negeri 1 Menggala
                         </div>
                         <div class="text-xs text-gray-500">
-                            Sistem Pembelajaran Daring
+                            Sistem Pembelajaran Dalam Jaringan
                         </div>
                     </div>
                 </div>
