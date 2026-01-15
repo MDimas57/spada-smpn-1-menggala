@@ -6,6 +6,7 @@ use App\Filament\Resources\SiswaResource;
 use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
+use Filament\Actions\Action;
 
 class CreateSiswa extends CreateRecord
 {
@@ -44,12 +45,34 @@ class CreateSiswa extends CreateRecord
 
         return $data;
     }
-      protected function getHeaderActions(): array
+        protected function getRedirectUrl(): string
     {
-        return [
-            Actions\CreateAction::make()
-                ->label('Tambah Wali Kelas'),
-        ];
+        return $this->getResource()::getUrl('index'); 
+    }
+    public function getTitle(): string
+    {
+        return 'Tambah Siswa';
+    }
+     public function getBreadcrumb(): string
+    {
+        return 'Tambah';
+    }
+    
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()
+            ->label('Tambah');
+    }
+
+    protected function getCreateAnotherFormAction(): Action
+    {
+        return parent::getCreateAnotherFormAction()
+            ->label('Tambah & Buat Lagi');
+    }
+    protected function getCancelFormAction(): Action
+    {
+        return parent::getCancelFormAction()
+            ->label('Batal');
     }
 
 }

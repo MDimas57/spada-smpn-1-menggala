@@ -5,6 +5,7 @@ namespace App\Filament\Resources\GuruResource\Pages;
 use App\Filament\Resources\GuruResource;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Hash;
+use Filament\Actions\Action;
 
 class EditGuru extends EditRecord
 {
@@ -43,4 +44,15 @@ class EditGuru extends EditRecord
 
         return $data;
     }
+     protected function getCancelFormAction(): Action
+    {
+        return parent::getCancelFormAction()
+            ->label('Batal');
+    }
+     protected function getSaveFormAction(): Action
+    {
+        return parent::getSaveFormAction()
+            ->label('Simpan');
+    }
+
 }

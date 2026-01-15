@@ -6,6 +6,7 @@ use App\Filament\Resources\GuruResource;
 use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
+use Filament\Actions\Action;
 
 class CreateGuru extends CreateRecord
 {
@@ -37,5 +38,29 @@ class CreateGuru extends CreateRecord
     {
         return $this->getResource()::getUrl('index'); 
     }
+    public function getTitle(): string
+    {
+        return 'Tambah Guru';
+    }
+     public function getBreadcrumb(): string
+    {
+        return 'Buat';
+    }
+    
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()
+            ->label('Tambah');
+    }
 
+    protected function getCreateAnotherFormAction(): Action
+    {
+        return parent::getCreateAnotherFormAction()
+            ->label('Tambah & Buat Lagi');
+    }
+    protected function getCancelFormAction(): Action
+    {
+        return parent::getCancelFormAction()
+            ->label('Batal');
+    }
 }

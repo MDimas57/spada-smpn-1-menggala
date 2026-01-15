@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SiswaResource\Pages;
 use App\Filament\Resources\SiswaResource;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Hash;
+use Filament\Actions\Action;
 
 class EditSiswa extends EditRecord
 {
@@ -52,5 +53,15 @@ class EditSiswa extends EditRecord
         }
 
         return $data;
+    }
+     protected function getCancelFormAction(): Action
+    {
+        return parent::getCancelFormAction()
+            ->label('Batal');
+    }
+     protected function getSaveFormAction(): Action
+    {
+        return parent::getSaveFormAction()
+            ->label('Simpan');
     }
 }

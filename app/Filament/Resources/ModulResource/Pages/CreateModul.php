@@ -5,6 +5,8 @@ namespace App\Filament\Resources\ModulResource\Pages;
 use App\Filament\Resources\ModulResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
+use Filament\Actions\Action;
+
 
 class CreateModul extends CreateRecord
 {
@@ -25,5 +27,30 @@ class CreateModul extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index'); 
+    }
+     public function getTitle(): string
+    {
+        return 'Buat Modul';
+    }
+     public function getBreadcrumb(): string
+    {
+        return 'Buat';
+    }
+    
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()
+            ->label('Tambah');
+    }
+
+    protected function getCreateAnotherFormAction(): Action
+    {
+        return parent::getCreateAnotherFormAction()
+            ->label('Tambah & Buat Lagi');
+    }
+    protected function getCancelFormAction(): Action
+    {
+        return parent::getCancelFormAction()
+            ->label('Batal');
     }
 }

@@ -39,12 +39,15 @@ class AttendanceCategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('code')
+                     ->label('Kode')
                     ->required()
                     ->maxLength(10),
                 Forms\Components\TextInput::make('name')
+                    ->label('Nama Kategori')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('color')
+                    ->label('Warna')
                     ->maxLength(255)
                     ->default(null),
             ]);

@@ -34,7 +34,9 @@ class ModulResource extends Resource
                         Forms\Components\TextInput::make('judul')
                             ->required()
                             ->maxLength(255)
+                            ->label('Judul Materi')
                             ->columnSpanFull(),
+                            
 
                         // PILIHAN 1: Pilih Course (Recommended)
                         Forms\Components\Select::make('course_id')

@@ -21,6 +21,8 @@ class CourseResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationLabel = 'Kelola Course';
     protected static ?string $navigationGroup = 'Akademik';
+    protected static ?string $pluralLabel = 'Course';
+    protected static ?string $modelLabel = 'Course';
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
