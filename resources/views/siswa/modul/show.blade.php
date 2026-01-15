@@ -218,7 +218,7 @@
                                             </div>
                                         @else
                                             <form action="{{ route('siswa.tugas.upload', $tugas->id) }}" method="POST" enctype="multipart/form-data"
-                                                  class="p-8 text-center transition-all border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 hover:bg-white hover:border-teal-400 hover:shadow-md group">
+                                                  class="p-8 text-center transition-all border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 hover:bg-white hover:border-teal-400 hover:shadow-md group" id="uploadForm-{{ $tugas->id }}">
                                                 @csrf
                                                 <div class="space-y-4">
                                                     <div class="flex flex-col items-center">
@@ -227,7 +227,7 @@
                                                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                                             </svg>
                                                         </div>
-                                                        <div class="flex justify-center mt-2 text-sm text-gray-600">
+                                                        <div class="flex items-center justify-center mt-2 text-sm text-gray-600">
                                                             <label for="file-upload-{{ $tugas->id }}" class="relative font-bold text-teal-600 bg-transparent rounded-md cursor-pointer hover:text-teal-500 focus-within:outline-none">
                                                                 <span>Upload file jawaban</span>
                                                                 <input id="file-upload-{{ $tugas->id }}" name="file" type="file" class="sr-only" required>
@@ -237,16 +237,136 @@
                                                         <p class="text-xs text-gray-500">PDF, DOC, JPG up to 10MB</p>
                                                     </div>
 
+                                                    <!-- Preview Area (hidden until a file is chosen) -->
+                                                    <div id="filePreview-{{ $tugas->id }}" class="hidden p-4 mt-3 text-left bg-white border border-gray-200 rounded-lg">
+                                                        <div class="flex items-start gap-4">
+                                                            <div id="fileThumb-{{ $tugas->id }}" class="flex items-center justify-center flex-shrink-0 w-20 h-20 overflow-hidden text-gray-400 rounded-md bg-gray-50">
+                                                                <!-- thumbnail will be injected -->
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <div class="flex items-center justify-between">
+                                                                    <div>
+                                                                        <div id="fileName-{{ $tugas->id }}" class="text-sm font-semibold text-gray-700"></div>
+                                                                        <div id="fileMeta-{{ $tugas->id }}" class="mt-1 text-xs text-gray-500"></div>
+                                                                    </div>
+                                                                    <div class="flex items-center gap-2">
+                                                                        <button type="button" id="viewFile-{{ $tugas->id }}" class="inline-flex items-center hidden px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded hover:bg-blue-700" target="_blank">
+                                                                            Lihat
+                                                                        </button>
+                                                                        <button type="button" id="removeFile-{{ $tugas->id }}" class="inline-flex items-center px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded hover:bg-gray-200">
+                                                                            Hapus
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <p id="fileNote-{{ $tugas->id }}" class="mt-2 text-xs text-gray-500"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="p-3 mt-4 text-left bg-white border border-gray-200 rounded-lg">
                                                         <label class="block mb-1 text-sm font-medium text-gray-700">Catatan Tambahan (Opsional)</label>
                                                         <textarea name="catatan" rows="2" class="w-full text-gray-700 border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm" placeholder="Tulis catatan untuk guru jika ada..."></textarea>
                                                     </div>
 
-                                                    <button type="submit" class="inline-flex justify-center w-full px-4 py-2.5 text-sm font-bold text-white bg-teal-600 border border-transparent rounded-lg shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all">
+                                                    <button type="submit" class="inline-flex justify-center w-full px-4 py-2.5 text-sm font-bold text-white bg-teal-600 border border-transparent rounded-lg shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all" id="submitBtn-{{ $tugas->id }}">
                                                         Kirim Tugas
                                                     </button>
                                                 </div>
                                             </form>
+
+                                            <script>
+                                                (function(){
+                                                    const input = document.getElementById('file-upload-{{ $tugas->id }}');
+                                                    const previewWrap = document.getElementById('filePreview-{{ $tugas->id }}');
+                                                    const thumb = document.getElementById('fileThumb-{{ $tugas->id }}');
+                                                    const fileNameEl = document.getElementById('fileName-{{ $tugas->id }}');
+                                                    const fileMetaEl = document.getElementById('fileMeta-{{ $tugas->id }}');
+                                                    const viewBtn = document.getElementById('viewFile-{{ $tugas->id }}');
+                                                    const removeBtn = document.getElementById('removeFile-{{ $tugas->id }}');
+                                                    const fileNote = document.getElementById('fileNote-{{ $tugas->id }}');
+                                                    let currentUrl = null;
+
+                                                    function humanFileSize(size) {
+                                                        const i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+                                                        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'KB', 'MB', 'GB'][i];
+                                                    }
+
+                                                    input.addEventListener('change', function(e){
+                                                        const file = this.files && this.files[0];
+                                                        if(!file) {
+                                                            clearPreview();
+                                                            return;
+                                                        }
+
+                                                        // revoke old url
+                                                        if(currentUrl) {
+                                                            URL.revokeObjectURL(currentUrl);
+                                                            currentUrl = null;
+                                                        }
+
+                                                        fileNameEl.textContent = file.name;
+                                                        fileMetaEl.textContent = file.type + ' • ' + humanFileSize(file.size);
+                                                        fileNote.textContent = 'File akan dikirim saat Anda menekan "Kirim Tugas".';
+
+                                                        // create preview URL
+                                                        const url = URL.createObjectURL(file);
+                                                        currentUrl = url;
+
+                                                        // Reset thumb content
+                                                        thumb.innerHTML = '';
+
+                                                        if (file.type.startsWith('image/')) {
+                                                            const img = document.createElement('img');
+                                                            img.src = url;
+                                                            img.className = 'object-cover w-full h-full';
+                                                            img.alt = file.name;
+                                                            thumb.appendChild(img);
+                                                            viewBtn.classList.remove('hidden');
+                                                            viewBtn.onclick = () => window.open(url, '_blank');
+                                                        } else if (file.type === 'application/pdf') {
+                                                            // show pdf icon and enable view
+                                                            thumb.innerHTML = '<svg class="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4 8v12a2 2 0 002 2h12a2 2 0 002-2V8l-8-6zM8 20v-8h8v8H8z"/></svg>';
+                                                            viewBtn.classList.remove('hidden');
+                                                            viewBtn.onclick = () => window.open(url, '_blank');
+                                                        } else {
+                                                            // generic file icon
+                                                            thumb.innerHTML = '<svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7v10M17 7v10M3 7h18M3 17h18"/></svg>';
+                                                            viewBtn.classList.add('hidden');
+                                                            viewBtn.onclick = null;
+                                                        }
+
+                                                        previewWrap.classList.remove('hidden');
+                                                    });
+
+                                                    removeBtn.addEventListener('click', function(){
+                                                        input.value = '';
+                                                        clearPreview();
+                                                    });
+
+                                                    function clearPreview(){
+                                                        if(currentUrl) {
+                                                            URL.revokeObjectURL(currentUrl);
+                                                            currentUrl = null;
+                                                        }
+                                                        thumb.innerHTML = '';
+                                                        fileNameEl.textContent = '';
+                                                        fileMetaEl.textContent = '';
+                                                        fileNote.textContent = '';
+                                                        viewBtn.classList.add('hidden');
+                                                        viewBtn.onclick = null;
+                                                        previewWrap.classList.add('hidden');
+                                                    }
+
+                                                    // Clean up when form is submitted to avoid leaked object URLs
+                                                    const form = document.getElementById('uploadForm-{{ $tugas->id }}');
+                                                    form.addEventListener('submit', function(){
+                                                        if(currentUrl) {
+                                                            URL.revokeObjectURL(currentUrl);
+                                                            currentUrl = null;
+                                                        }
+                                                    });
+                                                })();
+                                            </script>
                                         @endif
                                     </div>
                                 </div>
