@@ -25,7 +25,6 @@ class MaterisRelationManager extends RelationManager
                     ->options([
                         'pdf' => 'Dokumen PDF',
                         'file' => 'File Lain (PPT/Doc)',
-                        'video' => 'Video (MP4)',
                         'link' => 'Tautan Luar (Youtube/Drive)',
                     ])
                     ->required()
@@ -36,8 +35,8 @@ class MaterisRelationManager extends RelationManager
                     ->label('Upload File')
                     ->directory('materi-files')
                     ->disk('public')
-                    ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'video/mp4'])
-                    ->visible(fn (Forms\Get $get) => in_array($get('tipe'), ['pdf', 'file', 'video'])),
+                    ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'])
+                    ->visible(fn (Forms\Get $get) => in_array($get('tipe'), ['pdf', 'file'])),
 
                 // Field Link (Muncul jika tipe Link)
                 Forms\Components\TextInput::make('url')
@@ -57,7 +56,7 @@ class MaterisRelationManager extends RelationManager
                     ->colors([
                         'primary' => 'link',
                         'success' => 'pdf',
-                        'warning' => 'video',
+                        // 'warning' => 'video',
                     ]),
             ])
             ->headerActions([
