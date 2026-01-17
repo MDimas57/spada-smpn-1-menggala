@@ -2,6 +2,7 @@
     <div class="min-h-screen py-12 bg-gray-50">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
 
+            {{-- Breadcrumb --}}
             <nav class="flex mb-6" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                     <li class="inline-flex items-center">
@@ -24,6 +25,7 @@
                 </ol>
             </nav>
 
+            {{-- Header Course --}}
             <div class="mb-8 overflow-hidden bg-white border border-gray-200 shadow-sm rounded-2xl">
                 @php
                     // Gradient Teal ke Cyan
@@ -65,7 +67,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-center gap-4 p-5 border shadow-lg border-white/20 rounded-xl bg-white/10 backdrop-blur-md">
                                 <div class="text-center min-w-[80px]">
                                     <p class="text-3xl font-bold text-white">{{ $moduls->count() }}</p>
@@ -76,6 +78,7 @@
                     </div>
                 </div>
 
+                {{-- Navigation Tabs --}}
                 <div class="bg-white border-b border-gray-200">
                     <nav class="flex px-6 -mb-px space-x-8 overflow-x-auto" aria-label="Tabs">
                         <a href="#"
@@ -98,6 +101,7 @@
                 </div>
             </div>
 
+            {{-- Content Modul List --}}
             <div class="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-2xl">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
                     <h2 class="flex items-center gap-2 text-lg font-bold text-gray-800">
@@ -111,7 +115,8 @@
 
                 <div class="divide-y divide-gray-100">
                     @forelse($moduls->sortBy('created_at')->values() as $index => $modul)
-                        <details class="transition-colors duration-200 group open:bg-gray-50/50" {{ $index === 0 ? 'open' : '' }}>
+                        {{-- PERBAIKAN: Menghapus kondisi open pada details agar default tertutup --}}
+                        <details class="transition-colors duration-200 group open:bg-gray-50/50">
                             <summary class="flex items-center justify-between px-6 py-5 transition-all cursor-pointer select-none hover:bg-gray-50">
                                 <div class="flex items-center flex-1 gap-4">
                                     <div class="flex items-center justify-center w-8 h-8 text-sm font-bold text-gray-500 transition-colors bg-gray-100 border border-gray-200 rounded-lg group-open:bg-teal-100 group-open:text-teal-700 group-open:border-teal-200">
@@ -134,7 +139,7 @@
                                     </span>
                                     <div class="flex items-center justify-center w-8 h-8 transition-colors bg-white border border-gray-200 rounded-full group-open:bg-teal-50 group-open:border-teal-100">
                                         <svg class="w-4 h-4 text-gray-400 transition-transform duration-200 group-open:rotate-180 group-open:text-teal-600"
-                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
                                     </div>
