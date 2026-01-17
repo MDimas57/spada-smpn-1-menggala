@@ -64,4 +64,8 @@ class EditSiswa extends EditRecord
         return parent::getSaveFormAction()
             ->label('Simpan');
     }
+     protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); 
+    }
 }

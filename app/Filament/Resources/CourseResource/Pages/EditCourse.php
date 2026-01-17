@@ -40,4 +40,8 @@ class EditCourse extends EditRecord
         return parent::getDeleteFormAction()
             ->label('Hapus');
     }
+     protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); 
+    }
 }
