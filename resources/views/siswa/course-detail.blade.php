@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="divide-y divide-gray-100">
-                    @forelse($moduls as $index => $modul)
+                    @forelse($moduls->sortBy('created_at')->values() as $index => $modul)
                         <details class="transition-colors duration-200 group open:bg-gray-50/50" {{ $index === 0 ? 'open' : '' }}>
                             <summary class="flex items-center justify-between px-6 py-5 transition-all cursor-pointer select-none hover:bg-gray-50">
                                 <div class="flex items-center flex-1 gap-4">
