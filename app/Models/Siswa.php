@@ -12,10 +12,6 @@ class Siswa extends Model
 
     protected $guarded = [];
 
-    /**
-     * Relasi Many-to-Many ke Eskul.
-     * Siswa bisa mengikuti banyak Eskul.
-     */
     public function eskuls(): BelongsToMany
     {
         return $this->belongsToMany(Eskul::class, 'eskul_siswa', 'siswa_id', 'eskul_id')
@@ -27,9 +23,6 @@ class Siswa extends Model
         return $this->hasMany(PengumpulanTugas::class, 'siswa_id');
     }
 
-    /**
-     * Relasi ke JawabanKuis yang dikumpulkan siswa ini
-     */
     public function jawabanKuis()
     {
         return $this->hasMany(\App\Models\JawabanKuis::class, 'siswa_id');

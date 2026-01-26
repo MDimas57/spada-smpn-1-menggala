@@ -10,13 +10,13 @@ use App\Models\PengumpulanTugas;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class SiswaController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
+        /** @var \App\Models\User $user */
 
         if (!$user->siswa) {
             abort(403, 'Profil siswa tidak ditemukan.');
@@ -37,6 +37,7 @@ class SiswaController extends Controller
     public function myCourses()
     {
         $user = Auth::user();
+        /** @var \App\Models\User $user */
 
         if (!$user->siswa) {
             abort(403, 'Profil siswa tidak ditemukan.');
@@ -80,7 +81,10 @@ class SiswaController extends Controller
 
         // Toggle: Jika relasi sudah ada maka dihapus (unstar), jika belum ada maka dibuat (star)
         // Fungsi toggle() otomatis menangani logic ini di tabel pivot
-        Auth::user()->starredCourses()->toggle($course->id);
+    // Tell analyzer that Auth::user() returns App\Models\User (for IDEs that don't infer it)
+    /** @var \App\Models\User $authUser */
+    $authUser = Auth::user();
+    $authUser->starredCourses()->toggle($course->id);
 
         return response()->json([
             'status' => 'success',
@@ -94,6 +98,7 @@ class SiswaController extends Controller
     public function showCourse(Course $course)
     {
         $user = Auth::user();
+        /** @var \App\Models\User $user */
 
         if (!$user->siswa) {
             abort(403, 'Profil siswa tidak ditemukan.');
@@ -120,6 +125,7 @@ class SiswaController extends Controller
     private function getTimelineData($kelasId)
     {
         $siswa = Auth::user()->siswa;
+        /** @var \App\Models\Siswa $siswa */
 
         // Get semua tugas dari modul di kelas ini
         $tugas = Tugas::with(['modul.mapel', 'modul.guru.user'])
@@ -191,6 +197,7 @@ class SiswaController extends Controller
     public function show(Modul $modul)
     {
         $siswa = Auth::user()->siswa;
+        /** @var \App\Models\Siswa $siswa */
         if ($modul->kelas_id !== $siswa->kelas_id) {
             abort(403, 'Anda tidak memiliki akses ke modul ini.');
         }
@@ -216,7 +223,8 @@ class SiswaController extends Controller
             'catatan' => 'nullable|string',
         ]);
 
-        $siswa = Auth::user()->siswa;
+    $siswa = Auth::user()->siswa;
+    /** @var \App\Models\Siswa $siswa */
 
         if ($tugas->deadline && now()->greaterThan($tugas->deadline)) {
             return back()->with('error', 'Maaf, waktu pengumpulan tugas sudah habis.');
@@ -242,6 +250,7 @@ class SiswaController extends Controller
     public function kerjakanKuis(Kuis $kuis)
     {
         $siswa = Auth::user()->siswa;
+        /** @var \App\Models\Siswa $siswa */
 
         if ($kuis->modul->kelas_id !== $siswa->kelas_id) {
             abort(403, 'Akses ditolak.');
@@ -262,6 +271,7 @@ class SiswaController extends Controller
     public function submitKuis(Request $request, Kuis $kuis)
     {
         $siswa = Auth::user()->siswa;
+        /** @var \App\Models\Siswa $siswa */
 
         $request->validate([
             'jawaban' => 'array',

@@ -29,7 +29,6 @@ class TugasRelationManager extends RelationManager
                     ->label('Batas Pengumpulan')
                     ->required(),
 
-                // Lampiran tugas (opsional)
                 Forms\Components\FileUpload::make('file_path')
                     ->label('Lampiran Tugas (PDF / DOC / DOCX)')
                     ->directory('tugas-files')
