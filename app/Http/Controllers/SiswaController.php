@@ -91,10 +91,6 @@ class SiswaController extends Controller
             'message' => 'Star status updated'
         ]);
     }
-
-    /**
-     * Tampilkan daftar Modul dari Course tertentu
-     */
     public function showCourse(Course $course)
     {
         $user = Auth::user();
@@ -104,12 +100,10 @@ class SiswaController extends Controller
             abort(403, 'Profil siswa tidak ditemukan.');
         }
 
-        // Validasi: Course harus untuk kelas siswa
         if ($course->kelas_id !== $user->siswa->kelas_id) {
             abort(403, 'Anda tidak memiliki akses ke course ini.');
         }
 
-        // Load modul-modul yang published dari course ini dengan relasi
         $moduls = Modul::with(['mapel', 'guru.user', 'materis', 'tugas', 'kuis'])
             ->where('course_id', $course->id)
             ->where('status', 'published')
@@ -118,10 +112,6 @@ class SiswaController extends Controller
 
         return view('siswa.course-detail', compact('course', 'moduls', 'user'));
     }
-
-    /**
-     * Mengambil timeline data tugas dan kuis untuk siswa
-     */
     private function getTimelineData($kelasId)
     {
         $siswa = Auth::user()->siswa;
