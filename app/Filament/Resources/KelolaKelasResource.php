@@ -16,46 +16,33 @@ use Illuminate\Database\Eloquent\Builder;
 class KelolaKelasResource extends Resource
 {
     protected static ?string $model = Kelas::class;
-
-    protected static ?string $navigationLabel = 'Kelola Kelas';
+    protected static ?string $navigationLabel = 'Daftar Siswa di Kelas'; // ✅ LABEL LEBIH JELAS
     protected static ?string $slug = 'kelola-kelas';
     protected static ?string $modelLabel = 'Kelola Kelas';
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?int $navigationSort = 20; // ✅ DIUBAH
 
-    /**
-     * PEMBATASAN AKSES KE RESOURCE
-     * - Hanya guru yang menjadi Wali Kelas yang bisa melihat menu ini
-     * - Admin tidak bisa mengakses resource ini
-     */
     public static function canViewAny(): bool
     {
         $user = auth()->user();
 
-        // Pastikan user login
         if (!$user) {
             return false;
         }
 
-        // Hanya user dengan role 'guru' yang bisa melihat menu ini
         if (!$user->hasRole('guru')) {
             return false;
         }
 
-        // Cek apakah guru ini memiliki penugasan Wali Kelas
         $guru = $user->guru;
         if (!$guru) {
             return false;
         }
 
-        // Jika guru sudah ditugaskan sebagai Wali Kelas, izinkan akses
         return WaliKelas::where('guru_id', $guru->id)->exists();
     }
 
-    /**
-     * QUERY FILTERING
-     * Guru hanya bisa melihat kelas yang sudah ditugaskan sebagai Wali Kelasnya
-     */
     public static function form(Form $form): Form
     {
         return $form
@@ -82,7 +69,6 @@ class KelolaKelasResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // Filter: Hanya tampilkan kelas yang ditugaskan ke Wali Kelas (guru yang login)
             ->modifyQueryUsing(fn (Builder $query) =>
                 $query
                     ->with(['waliKelas.guru.user'])
@@ -131,18 +117,11 @@ class KelolaKelasResource extends Resource
         ];
     }
 
-    /**
-     * Pastikan guru tidak bisa membuat kelas baru dari halaman ini
-     */
     public static function canCreate(): bool
     {
         return false;
     }
 
-    /**
-     * PEMBATASAN EDIT
-     * Guru hanya bisa mengedit kelas yang sudah ditugaskan kepadanya
-     */
     public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
     {
         $user = auth()->user();
@@ -156,16 +135,11 @@ class KelolaKelasResource extends Resource
             return false;
         }
 
-        // Cek apakah kelas ini ditugaskan ke guru yang login
         return WaliKelas::where('guru_id', $guru->id)
             ->where('kelas_id', $record->id)
             ->exists();
     }
 
-    /**
-     * PEMBATASAN DELETE
-     * Guru tidak diizinkan menghapus kelas
-     */
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
         return false;

@@ -13,12 +13,11 @@ use Filament\Tables\Table;
 class EskulResource extends Resource
 {
     protected static ?string $model = Eskul::class;
-
     protected static ?string $navigationGroup = 'Kesiswaan';
     protected static ?string $navigationLabel = 'Ekstrakurikuler';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static ?string $pluralLabel = 'Ekstrakurikuler';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 50; // ✅ DIUBAH
 
     public static function form(Form $form): Form
     {
@@ -43,10 +42,6 @@ class EskulResource extends Resource
                 ])
                 ->required(),
 
-            // ================================
-            // 📌 Relasi Many-to-Many
-            // Tabel Pivot: pembina_eskul
-            // ================================
             Forms\Components\Select::make('pembina')
                 ->label('Pembina Eskul (Guru)')
                 ->multiple()
@@ -72,7 +67,6 @@ class EskulResource extends Resource
                     ->label('Kategori')
                     ->sortable(),
 
-                // Menampilkan daftar Guru Pembina
                 Tables\Columns\BadgeColumn::make('pembinas.user.name')
                     ->label('Pembina')
                     ->separator(', ')
@@ -91,25 +85,21 @@ class EskulResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
+
     public static function shouldRegisterNavigation(): bool
     {
         $user = auth()->user();
 
-        // Jika belum login → sembunyikan
         if (!$user) {
             return false;
         }
 
-        // Jika dia guru → sembunyikan
         if ($user->hasRole('guru')) {
             return false;
         }
 
-        // Selain guru (admin/operator) → tampilkan
         return true;
     }
 

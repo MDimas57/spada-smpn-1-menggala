@@ -19,20 +19,19 @@ class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-    protected static ?string $navigationLabel = 'Kelola Course';
+    protected static ?string $navigationLabel = 'Mata Pelajaran Saya'; // ✅ LABEL LEBIH RAMAH
     protected static ?string $navigationGroup = 'Akademik';
-    protected static ?string $pluralLabel = 'Course';
-    protected static ?string $modelLabel = 'Course';
-    protected static ?int $navigationSort = 1;
+    protected static ?string $pluralLabel = 'Mata Pelajaran';
+    protected static ?string $modelLabel = 'Mata Pelajaran';
+    protected static ?int $navigationSort = 30; // ✅ DIUBAH
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi Course')
-                    ->description('Course adalah mata pelajaran untuk kelas tertentu')
+                Forms\Components\Section::make('Informasi Mata Pelajaran')
+                    ->description('Mata pelajaran untuk kelas tertentu')
                     ->schema([
-                        // Input Guru (Khusus Admin)
                         Forms\Components\Select::make('guru_id')
                             ->label('Guru Pengampu')
                             ->options(\App\Models\Guru::with('user')->get()->pluck('user.name', 'id'))
@@ -46,25 +45,18 @@ class CourseResource extends Resource
                                 $set('mapel_id', null);
                             }),
 
-                        // Pilih Kelas (dinamis berdasarkan guru)
                         Forms\Components\Select::make('kelas_id')
                             ->label('Kelas')
                             ->options(function (Get $get) {
                                 $guruId = null;
-
-                                // Jika user adalah admin, gunakan guru_id dari form
                                 if (auth()->user()->hasRole('admin')) {
                                     $guruId = $get('guru_id');
                                 } else {
-                                    // Jika user adalah guru, gunakan guru_id dari user yang login
                                     $guruId = auth()->user()->guru?->id;
                                 }
-
                                 if (!$guruId) {
                                     return [];
                                 }
-
-                                // Query kelas yang diajar oleh guru
                                 return \App\Models\Kelas::whereHas('gurus', function (Builder $q) use ($guruId) {
                                     $q->where('gurus.id', $guruId);
                                 })
@@ -79,26 +71,19 @@ class CourseResource extends Resource
                                 $set('mapel_id', null);
                             }),
 
-                        // Pilih Mapel (filtered by Guru dan Kelas)
                         Forms\Components\Select::make('mapel_id')
                             ->label('Mata Pelajaran')
                             ->options(function (Get $get) {
                                 $guruId = null;
                                 $kelasId = $get('kelas_id');
-
-                                // Jika user adalah admin, gunakan guru_id dari form
                                 if (auth()->user()->hasRole('admin')) {
                                     $guruId = $get('guru_id');
                                 } else {
-                                    // Jika user adalah guru, gunakan guru_id dari user yang login
                                     $guruId = auth()->user()->guru?->id;
                                 }
-
                                 if (!$guruId || !$kelasId) {
                                     return [];
                                 }
-
-                                // Query mapel yang diajar oleh guru DAN ada jadwal di kelas tersebut
                                 return \App\Models\Mapel::whereHas('gurus', function (Builder $q) use ($guruId) {
                                     $q->where('gurus.id', $guruId);
                                 })
@@ -118,7 +103,6 @@ class CourseResource extends Resource
                                 !$get('kelas_id') ? 'Pilih Kelas Terlebih Dahulu' : 'Pilih Mata Pelajaran'
                             ),
 
-                        // Nama Course (otomatis terisi)
                         Forms\Components\TextInput::make('nama')
                             ->label('Nama Course')
                             ->placeholder('Contoh: Matematika - X IPA 1')
@@ -186,7 +170,6 @@ class CourseResource extends Resource
         ];
     }
 
-    // Filter: Guru hanya melihat course miliknya
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
@@ -198,14 +181,12 @@ class CourseResource extends Resource
             }
         }
 
-        // Eager-load relations used in the cards view and include modul counts
         $query->with(['kelas', 'mapel'])
               ->withCount('moduls');
 
         return $query;
     }
 
-    // Hanya Admin & Guru yang bisa akses
     public static function canViewAny(): bool
     {
         return auth()->user()->hasAnyRole(['admin', 'guru']);

@@ -15,10 +15,10 @@ class GuruResource extends Resource
     protected static ?string $model = Guru::class;
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'User Management';
-     protected static ?string $navigationLabel = 'Kelola Guru';
+    protected static ?string $navigationLabel = 'Kelola Guru';
     protected static ?string $pluralLabel = 'Kelola Guru';
     protected static ?string $modelLabel = 'Kelola Guru';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10; // ✅ DIUBAH
 
     public static function canViewAny(): bool
     {
@@ -61,15 +61,12 @@ class GuruResource extends Resource
                         Forms\Components\TextInput::make('gelar_depan'),
                         Forms\Components\TextInput::make('gelar_belakang'),
 
-                        // 1. Relasi Mapel (Sudah ada)
                         Forms\Components\Select::make('mapels')
                             ->relationship('mapels', 'nama')
                             ->multiple()
                             ->preload()
                             ->label('Mata Pelajaran Ampuan'),
 
-                        // 2. TAMBAHAN BARU: Relasi Kelas (Penugasan)
-                        // Pastikan method 'kelas()' sudah ada di Model Guru
                         Forms\Components\Select::make('kelas')
                             ->relationship('kelas', 'nama')
                             ->multiple()
@@ -97,7 +94,6 @@ class GuruResource extends Resource
                     ->badge()
                     ->limitList(2),
 
-                // 3. TAMBAHAN BARU: Menampilkan Kelas di Tabel
                 Tables\Columns\TextColumn::make('kelas.nama')
                     ->label('Kelas Ajar')
                     ->badge()

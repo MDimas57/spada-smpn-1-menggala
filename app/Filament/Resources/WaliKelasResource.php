@@ -16,15 +16,12 @@ class WaliKelasResource extends Resource
     protected static ?string $navigationGroup = 'User Management';
     protected static ?string $navigationLabel = 'Wali Kelas';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 12; // ✅ DIUBAH
 
     public static function form(Form $form): Form
     {
         return $form->schema([
 
-            // ==========================
-            // Select Guru
-            // ==========================
             Select::make('guru_id')
                 ->label('Pilih Guru')
                 ->relationship('guru', 'id')
@@ -36,9 +33,6 @@ class WaliKelasResource extends Resource
                 ->searchable()
                 ->preload(),
 
-            // ==========================
-            // Select Kelas (UNIQUE)
-            // ==========================
             Select::make('kelas_id')
                 ->label('Pilih Kelas')
                 ->relationship('kelas', 'nama')
@@ -85,10 +79,9 @@ class WaliKelasResource extends Resource
             'edit' => Pages\EditWaliKelas::route('/{record}/edit'),
         ];
     }
+
     public static function canViewAny(): bool
     {
-        // Hanya admin yang bisa melihat menu Wali Kelas
         return auth()->user()?->hasRole('admin');
     }
-
 }

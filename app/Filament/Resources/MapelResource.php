@@ -13,19 +13,17 @@ use Filament\Tables\Table;
 class MapelResource extends Resource
 {
     protected static ?string $model = Mapel::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Kelola Mata Pelajaran';
     protected static ?string $pluralLabel = 'Kelola Mata Pelajaran';
     protected static ?string $modelLabel = 'Kelola Mata Pelajaran';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 22; // ✅ DIUBAH
 
     public static function canViewAny(): bool
     {
         return auth()->user()->hasRole('admin');
     }
-
 
     public static function form(Form $form): Form
     {

@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\Auth;
 class ModulResource extends Resource
 {
     protected static ?string $model = Modul::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Akademik';
-     protected static ?string $navigationLabel = 'Modul';
-    protected static ?string $pluralLabel = 'Modul';
-    protected static ?string $modelLabel = 'Modul';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Modul Pembelajaran'; // ✅ LABEL LEBIH JELAS
+    protected static ?string $pluralLabel = 'Modul Pembelajaran';
+    protected static ?string $modelLabel = 'Modul Pembelajaran';
+    protected static ?int $navigationSort = 31; // ✅ DIUBAH
 
     public static function form(Form $form): Form
     {
@@ -36,9 +36,7 @@ class ModulResource extends Resource
                             ->maxLength(255)
                             ->label('Judul Materi')
                             ->columnSpanFull(),
-                            
 
-                        // PILIHAN 1: Pilih Course (Recommended)
                         Forms\Components\Select::make('course_id')
                             ->label('Pilih Course')
                             ->relationship(
@@ -67,7 +65,6 @@ class ModulResource extends Resource
                             })
                             ->helperText('Pilih course untuk auto-fill guru, kelas, dan mapel'),
 
-                        // ATAU: Input Manual (jika course belum dipilih)
                         Forms\Components\Select::make('guru_id')
                             ->label('Guru Pengampu')
                             ->options(\App\Models\Guru::with('user')->get()->pluck('user.name', 'id'))

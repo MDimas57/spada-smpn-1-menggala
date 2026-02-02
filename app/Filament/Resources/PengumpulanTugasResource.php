@@ -16,13 +16,11 @@ use Illuminate\Support\Facades\Storage;
 class PengumpulanTugasResource extends Resource
 {
     protected static ?string $model = PengumpulanTugas::class;
-
-    // Ganti Label Menu agar lebih komunikatif
-    protected static ?string $navigationLabel = 'Koreksi Tugas';
+    protected static ?string $navigationLabel = 'Koreksi Tugas Siswa'; // ✅ LABEL LEBIH JELAS
     protected static ?string $modelLabel = 'Pengumpulan Tugas';
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
     protected static ?string $navigationGroup = 'Akademik';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 32; // ✅ DIUBAH
 
     public static function form(Form $form): Form
     {
@@ -30,7 +28,6 @@ class PengumpulanTugasResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Detail Pengumpulan')
                     ->schema([
-                        // Tampilkan info siswa & tugas sebagai teks saja (Placeholder)
                         Forms\Components\Placeholder::make('siswa_nama')
                             ->label('Nama Siswa')
                             ->content(fn ($record) => $record->siswa->user->name . ' (' . $record->siswa->kelas->nama . ')'),
@@ -43,14 +40,13 @@ class PengumpulanTugasResource extends Resource
                             ->label('Waktu Pengumpulan')
                             ->content(fn ($record) => $record->tanggal_dikumpulkan),
 
-                        // File Upload (Hanya bisa didownload/lihat, disable edit untuk guru)
                         Forms\Components\FileUpload::make('file_path')
                             ->label('File Jawaban Siswa')
                             ->directory('tugas-siswa')
                             ->downloadable()
                             ->openable()
                             ->disabled()
-                            ->dehydrated(false) // Agar tidak ikut tersimpan ulang saat save
+                            ->dehydrated(false)
                             ->columnSpanFull(),
                     ])->columns(3),
 
@@ -78,7 +74,7 @@ class PengumpulanTugasResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('siswa.user.name')
                     ->label('Siswa')
-                    ->description(fn ($record) => $record->siswa->kelas->nama) // Tampilkan kelas di bawah nama
+                    ->description(fn ($record) => $record->siswa->kelas->nama)
                     ->searchable()
                     ->sortable(),
 
@@ -91,7 +87,6 @@ class PengumpulanTugasResource extends Resource
                     ->dateTime('d M Y, H:i')
                     ->sortable(),
 
-                // Tombol Download File Cepat
                 Tables\Columns\TextColumn::make('file_path')
                     ->label('File')
                     ->formatStateUsing(fn () => 'Buka File')
@@ -100,7 +95,6 @@ class PengumpulanTugasResource extends Resource
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('primary'),
 
-                // Input Nilai Langsung di Tabel (Agar Guru kerja cepat)
                 Tables\Columns\TextInputColumn::make('nilai')
                     ->label('Nilai')
                     ->type('number')
@@ -108,7 +102,6 @@ class PengumpulanTugasResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                // Filter tugas yang belum dinilai
                 Tables\Filters\Filter::make('belum_dinilai')
                     ->query(fn (Builder $query) => $query->whereNull('nilai'))
                     ->label('Hanya yang Belum Dinilai'),
@@ -127,18 +120,14 @@ class PengumpulanTugasResource extends Resource
         ];
     }
 
-    // Filter PENTING:
-    // Guru hanya boleh melihat tugas yang berasal dari MODUL MEREKA SENDIRI.
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
 
         if (Auth::user()->hasRole('guru')) {
-            // Ambil ID Modul yang dibuat oleh guru ini
             $guruId = Auth::user()->guru?->id;
 
             if ($guruId) {
-                // Query: Ambil pengumpulan_tugas dimana tugasnya milik modul yang dibuat guru ini
                 $query->whereHas('tugas', function($q) use ($guruId) {
                     $q->whereHas('modul', function($m) use ($guruId) {
                         $m->where('guru_id', $guruId);
@@ -150,8 +139,6 @@ class PengumpulanTugasResource extends Resource
         return $query;
     }
 
-    // Matikan tombol "Create"
-    // karena data ini hanya bisa dibuat oleh Siswa (lewat upload), bukan Guru/Admin
     public static function canCreate(): bool
     {
         return false;

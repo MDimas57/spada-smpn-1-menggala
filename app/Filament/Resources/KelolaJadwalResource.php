@@ -18,31 +18,25 @@ use Illuminate\Database\Eloquent\Builder;
 class KelolaJadwalResource extends Resource
 {
     protected static ?string $model = Kelas::class;
-
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Kelola Jadwal';
     protected static ?string $modelLabel = 'Jadwal Kelas';
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 23; // ✅ DIUBAH
     protected static ?string $slug = 'kelola-jadwal';
 
-    // 🔒 Batasi query untuk guru hanya melihat kelas yang mereka ajar
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-
         $user = auth()->user();
 
-        // Jika user adalah guru, filter hanya kelas yang diajarnya
         if ($user && $user->hasRole('guru')) {
-            $guru = $user->guru; // Asumsi relasi user->guru sudah ada
-
+            $guru = $user->guru;
             if ($guru) {
                 $query->whereHas('jadwals', function ($q) use ($guru) {
                     $q->where('guru_id', $guru->id);
                 })->distinct();
             } else {
-                // Jika tidak punya data guru, tidak tampilkan apapun
                 $query->whereRaw('1 = 0');
             }
         }
@@ -109,11 +103,9 @@ class KelolaJadwalResource extends Resource
                                             ->label('Guru Pengampu')
                                             ->options(function (Get $get) {
                                                 $mapelId = $get('mapel_id');
-
                                                 if (!$mapelId) {
                                                     return [];
                                                 }
-
                                                 return Guru::whereHas('mapels', function ($q) use ($mapelId) {
                                                     $q->where('mapels.id', $mapelId);
                                                 })->with('user')->get()->pluck('user.name', 'id');
@@ -163,7 +155,7 @@ class KelolaJadwalResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->label('Atur Jadwal')
                     ->icon('heroicon-m-calendar-days')
-                    ->visible(fn() => auth()->user()?->hasRole('admin')), // 🔥 Hanya Admin yang bisa Edit
+                    ->visible(fn() => auth()->user()?->hasRole('admin')),
             ])
             ->bulkActions([]);
     }

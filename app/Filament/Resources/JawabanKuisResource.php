@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\JawabanKuisResource\Pages;
-use App\Filament\Resources\JawabanKuisResource\RelationManagers;
 use App\Models\JawabanKuis;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,11 +15,10 @@ use Illuminate\Support\Facades\Auth;
 class JawabanKuisResource extends Resource
 {
     protected static ?string $model = JawabanKuis::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
     protected static ?string $navigationGroup = 'Akademik';
     protected static ?string $navigationLabel = 'Penilaian Essay Kuis';
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 33; // ✅ DIUBAH
     protected static ?string $pluralModelLabel = 'Penilaian Essay Kuis';
 
     public static function form(Form $form): Form
@@ -144,9 +142,7 @@ class JawabanKuisResource extends Resource
                     ->label('Nilai')
                     ->modalWidth('2xl'),
             ])
-            ->bulkActions([
-                // Tidak ada bulk actions untuk resource ini
-            ])
+            ->bulkActions([])
             ->defaultSort('updated_at', 'desc');
     }
 
@@ -154,13 +150,10 @@ class JawabanKuisResource extends Resource
     {
         $query = parent::getEloquentQuery();
 
-        // Filter untuk menampilkan hanya jawaban essay yang belum dinilai
-        // atau yang sudah dikerjakan siswa
         $query->whereHas('soal', function ($q) {
             $q->where('tipe', 'essay');
         });
 
-        // Jika user adalah guru, tampilkan hanya jawaban dari modulnya
         if (Auth::user()->hasRole('guru')) {
             $guruId = Auth::user()->guru?->id;
             if ($guruId) {
@@ -175,9 +168,7 @@ class JawabanKuisResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -188,4 +179,3 @@ class JawabanKuisResource extends Resource
         ];
     }
 }
-

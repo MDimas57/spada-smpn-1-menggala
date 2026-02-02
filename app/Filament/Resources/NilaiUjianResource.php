@@ -13,12 +13,11 @@ use Filament\Tables\Table;
 class NilaiUjianResource extends Resource
 {
     protected static ?string $model = NilaiUjian::class;
-
     protected static ?string $navigationGroup = 'Pengelolaan Nilai Siswa';
     protected static ?string $navigationLabel = 'Data Nilai (UTS/UAS)';
     protected static ?string $pluralLabel = 'Nilai Ujian';
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 41; // ✅ DIUBAH
 
     public static function form(Form $form): Form
     {

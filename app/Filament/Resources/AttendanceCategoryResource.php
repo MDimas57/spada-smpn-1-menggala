@@ -3,32 +3,28 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AttendanceCategoryResource\Pages;
-use App\Filament\Resources\AttendanceCategoryResource\RelationManagers;
 use App\Models\AttendanceCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AttendanceCategoryResource extends Resource
 {
     protected static ?string $navigationGroup = 'Absensi';
     protected static ?string $model = AttendanceCategory::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationLabel = 'Kategori Absensi';
     protected static ?string $pluralLabel = 'Kategori Absensi';
     protected static ?string $modelLabel = 'Kategori Absensi';
+    protected static ?int $navigationSort = 60; // ✅ DIUBAH
 
-    // Kontrol visibility menu berdasarkan role
     public static function shouldRegisterNavigation(): bool
     {
         return auth()->user()?->hasRole('admin') ?? false;
     }
 
-    // Batasi akses ke halaman resource
     public static function canAccess(): bool
     {
         return auth()->user()?->hasRole('admin') ?? false;
@@ -72,9 +68,7 @@ class AttendanceCategoryResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -87,9 +81,7 @@ class AttendanceCategoryResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

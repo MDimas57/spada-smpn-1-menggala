@@ -17,15 +17,12 @@ use Illuminate\Database\Eloquent\Model;
 class RekapNilaiTugasResource extends Resource
 {
     protected static ?string $model = Siswa::class;
-
     protected static ?string $navigationGroup = 'Pengelolaan Nilai Siswa';
     protected static ?string $navigationLabel = 'Rekap Nilai Tugas';
-     protected static ?string $pluralLabel = 'Daftar Siswa';
-
+    protected static ?string $pluralLabel = 'Daftar Siswa';
     protected static ?string $navigationIcon = 'heroicon-o-calculator';
     protected static ?string $slug = 'rekap-nilai-tugas';
-
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 40; // ✅ DIUBAH
 
     public static function table(Table $table): Table
     {
@@ -41,10 +38,8 @@ class RekapNilaiTugasResource extends Resource
                 ->searchable(),
         ];
 
-        // Ambil semua tugas yang ada
         $tugasList = Tugas::orderBy('id')->get();
 
-        // Tambahkan kolom untuk setiap tugas
         foreach ($tugasList as $tugas) {
             $columns[] = TextColumn::make("tugas_{$tugas->id}")
                 ->label("Tugas {$tugas->id}")
@@ -61,7 +56,6 @@ class RekapNilaiTugasResource extends Resource
                 ->badge();
         }
 
-        // Tambahkan kolom rata-rata
         $columns[] = TextColumn::make('rata_rata_nilai')
             ->label('Rata-rata')
             ->state(function (Model $record) {

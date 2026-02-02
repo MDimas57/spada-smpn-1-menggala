@@ -13,14 +13,12 @@ use Filament\Tables\Table;
 class TahunAjaranResource extends Resource
 {
     protected static ?string $model = TahunAjaran::class;
-
-    // Icon menu di sidebar
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
     protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Tahun Ajaran';
     protected static ?string $pluralLabel = 'Tahun Ajaran';
     protected static ?string $modelLabel = 'Tahun Ajaran';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 20; // ✅ DIUBAH
 
     public static function canViewAny(): bool
     {
@@ -57,9 +55,7 @@ class TahunAjaranResource extends Resource
                     ->boolean()
                     ->label('Status Aktif'),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

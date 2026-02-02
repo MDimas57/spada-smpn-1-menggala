@@ -20,7 +20,7 @@ class SiswaResource extends Resource
     protected static ?string $navigationLabel = 'Kelola Siswa';
     protected static ?string $pluralLabel = 'Kelola Siswa';
     protected static ?string $modelLabel = 'Kelola Siswa';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 11; // ✅ DIUBAH
 
     public static function canViewAny(): bool
     {
@@ -57,16 +57,13 @@ class SiswaResource extends Resource
                             ->label('NIS')
                             ->unique(ignoreRecord: true),
 
-                        // --- BAGIAN KELAS (OPSIONAL) ---
                         Forms\Components\Select::make('kelas_id')
                             ->relationship('kelas', 'nama')
                             ->searchable()
                             ->preload()
                             ->label('Kelas')
                             ->placeholder('Pilih Kelas (Opsional)')
-                            ->nullable(), // Mengizinkan nilai NULL
-                            // ->required() // Baris ini SUDAH DIHAPUS agar tidak wajib
-                        // -------------------------------
+                            ->nullable(),
                     ])->columns(2),
             ]);
     }
@@ -86,7 +83,7 @@ class SiswaResource extends Resource
 
                 Tables\Columns\TextColumn::make('kelas.nama')
                     ->label('Kelas')
-                    ->placeholder('Belum Masuk Kelas') // Teks jika kelas kosong
+                    ->placeholder('Belum Masuk Kelas')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('user.email')

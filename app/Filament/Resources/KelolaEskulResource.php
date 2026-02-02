@@ -15,53 +15,37 @@ use Illuminate\Database\Eloquent\Builder;
 class KelolaEskulResource extends Resource
 {
     protected static ?string $model = Eskul::class;
-
     protected static ?string $slug = 'kelola-eskul';
     protected static ?string $navigationLabel = 'Kelola Ekstrakurikuler';
     protected static ?string $pluralLabel = 'Kelola Ekstrakurikuler';
     protected static ?string $navigationGroup = 'Kesiswaan';
-    protected static ?string $navigationIcon = 'heroicon-o-trophy';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?int $navigationSort = 51; // ✅ DIUBAH
 
-    /**
-     * FILTER DATA BERDASARKAN ROLE:
-     *  - Admin → semua data
-     *  - Guru pembina → hanya eskul yang dibinanya
-     *  - Guru lain → kosong
-     */
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
 
-        // Admin → lihat semua
         if ($user->hasRole('admin')) {
             return parent::getEloquentQuery();
         }
 
-        // Jika tidak punya relasi guru → jangan tampilkan apa pun
         if (!$user->guru) {
             return parent::getEloquentQuery()->whereRaw('1 = 0');
         }
 
-        // Guru pembina → hanya lihat eskul yang dia bina
         return parent::getEloquentQuery()
             ->whereHas('pembinas', function ($q) use ($user) {
                 $q->where('guru_id', $user->guru->id);
             });
     }
 
-    /**
-     * IZIN AKSES HALAMAN LIST
-     */
     public static function canViewAny(): bool
     {
         $user = auth()->user();
-
         return $user->hasRole('admin') || $user->guru !== null;
     }
 
-    /**
-     * IZIN AKSES MELIHAT DETAIL
-     */
     public static function canView($record): bool
     {
         $user = auth()->user();
@@ -76,9 +60,6 @@ class KelolaEskulResource extends Resource
             ->exists();
     }
 
-    /**
-     * IZIN EDIT
-     */
     public static function canEdit($record): bool
     {
         $user = auth()->user();
@@ -97,26 +78,23 @@ class KelolaEskulResource extends Resource
     {
         return false;
     }
+
     public static function shouldRegisterNavigation(): bool
     {
         $user = auth()->user();
 
-        // Admin tetap bisa lihat menu
         if ($user->hasRole('admin')) {
             return true;
         }
 
-        // Guru pembina → bisa lihat
         if ($user->hasRole('guru') && $user->guru) {
             return \App\Models\Eskul::whereHas('pembinas', function ($q) use ($user) {
                 $q->where('guru_id', $user->guru->id);
             })->exists();
         }
 
-        // Guru yang tidak punya eskul = menu hilang
         return false;
     }
-
 
     public static function form(Form $form): Form
     {
