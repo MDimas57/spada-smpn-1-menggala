@@ -127,9 +127,9 @@
                                         </div>
                                         <div class="flex items-center gap-2">
                                             <div class="flex items-center justify-center w-6 h-6 text-xs font-bold text-white rounded-full bg-gradient-to-br {{ $gradient }}">
-                                                {{ substr($course->guru->user->name ?? 'G', 0, 1) }}
+                                                {{ substr($course->guru->display_name ?? ($course->guru->user->name ?? 'G'), 0, 1) }}
                                             </div>
-                                            <span class="text-xs text-gray-600">{{ $course->guru->user->name ?? 'Guru' }}</span>
+                                            <span class="text-xs text-gray-600">{{ $course->guru->display_name ?? ($course->guru->user->name ?? 'Guru') }}</span>
                                         </div>
                                     </div>
 
@@ -149,10 +149,10 @@
                                     <div class="flex items-center justify-between mt-auto course-footer-card">
                                         <div class="flex items-center gap-2">
                                             <div class="flex items-center justify-center w-9 h-9 text-xs font-bold text-white rounded-full bg-gradient-to-br {{ $gradient }}">
-                                                {{ substr($course->guru->user->name ?? 'G', 0, 1) }}
+                                                {{ substr($course->guru->display_name ?? ($course->guru->user->name ?? 'G'), 0, 1) }}
                                             </div>
                                             <div class="flex flex-col">
-                                                <span class="text-xs font-semibold text-gray-700">{{ $course->guru->user->name ?? 'Guru' }}</span>
+                                                <span class="text-xs font-semibold text-gray-700">{{ $course->guru->display_name ?? ($course->guru->user->name ?? 'Guru') }}</span>
                                                 <span class="text-[10px] text-gray-400">Pengajar</span>
                                             </div>
                                         </div>

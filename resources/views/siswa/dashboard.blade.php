@@ -118,7 +118,7 @@
                                             @if(isset($item->guru))
                                                 <p class="flex items-center gap-1 mt-1 text-sm text-gray-500">
                                                     <span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
-                                                    Oleh: {{ $item->guru->user->name ?? 'Guru' }}
+                                                    Oleh: {{ $item->guru->display_name ?? ($item->guru->user->name ?? 'Guru') }}
                                                 </p>
                                             @endif
                                         </div>

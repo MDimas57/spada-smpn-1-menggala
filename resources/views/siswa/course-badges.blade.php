@@ -60,9 +60,9 @@
                                 <div class="flex items-center gap-3 mt-4">
                                     <div class="flex items-center gap-2 text-white">
                                         <div class="flex items-center justify-center w-8 h-8 border border-white rounded-full bg-white/20">
-                                            {{ substr($course->guru->user->name ?? 'G', 0, 1) }}
+                                            {{ substr($course->guru->display_name ?? ($course->guru->user->name ?? 'G'), 0, 1) }}
                                         </div>
-                                        <span class="text-sm font-medium">{{ $course->guru->user->name ?? 'Guru' }}</span>
+                                        <span class="text-sm font-medium">{{ $course->guru->display_name ?? ($course->guru->user->name ?? 'Guru') }}</span>
                                     </div>
                                 </div>
                             </div>

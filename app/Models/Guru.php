@@ -44,4 +44,17 @@ class Guru extends Model
     {
         return $this->hasMany(JadwalPelajaran::class);
     }
+
+    /**
+     * Display name with academic titles (gelar depan & belakang) combined with user name.
+     * Example: "Dr. Nama Guru, M.Si"
+     */
+    public function getDisplayNameAttribute()
+    {
+        $name = $this->user?->name ?? '';
+        $front = $this->gelar_depan ? trim($this->gelar_depan) . ' ' : '';
+        $back = $this->gelar_belakang ? ', ' . trim($this->gelar_belakang) : '';
+
+        return trim($front . $name) . ($name ? $back : '');
+    }
 }
