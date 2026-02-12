@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="sticky top-0 z-20 bg-white border-b border-gray-200">
+    <div class="sticky top-20 z-20 bg-white border-b border-gray-200">
         <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="flex flex-col justify-between gap-4 md:flex-row md:items-start">
                 <div class="flex-1">
