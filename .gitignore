@@ -18,6 +18,8 @@
 /public/storage
 /storage/*.key
 /storage/pail
+# Ignore compiled Blade views (don't track runtime files)
+/storage/framework/views
 /vendor
 Homestead.json
 Homestead.yaml
