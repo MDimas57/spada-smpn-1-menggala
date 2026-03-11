@@ -129,6 +129,30 @@ class CourseResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Nama Course')
+                    ->searchable()
+                    ->sortable()
+                    ->wrap(),
+
+                Tables\Columns\TextColumn::make('kelas.nama')
+                    ->label('Kelas')
+                    ->sortable()
+                    ->badge(),
+
+                Tables\Columns\TextColumn::make('mapel.nama')
+                    ->label('Mata Pelajaran')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'draft' => 'gray',
+                        'published' => 'success',
+                        default => 'gray',
+                    }),
+            ])
             ->filters([
                 Tables\Filters\SelectFilter::make('kelas_id')
                     ->relationship('kelas', 'nama')
@@ -144,14 +168,7 @@ class CourseResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->defaultSort('created_at', 'desc')
-            ->content(view('filament.resources.course-resource.cards'))
-            ->contentGrid([
-                'default' => 1,
-                'sm' => 1,
-                'md' => 1,
-                'lg' => 1,
-            ]);
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

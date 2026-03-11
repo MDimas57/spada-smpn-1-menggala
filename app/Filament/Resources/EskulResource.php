@@ -90,17 +90,7 @@ class EskulResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
-
-        if (!$user) {
-            return false;
-        }
-
-        if ($user->hasRole('guru')) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     public static function getPages(): array

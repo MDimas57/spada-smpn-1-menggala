@@ -81,18 +81,6 @@ class KelolaEskulResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
-
-        if ($user->hasRole('admin')) {
-            return true;
-        }
-
-        if ($user->hasRole('guru') && $user->guru) {
-            return \App\Models\Eskul::whereHas('pembinas', function ($q) use ($user) {
-                $q->where('guru_id', $user->guru->id);
-            })->exists();
-        }
-
         return false;
     }
 

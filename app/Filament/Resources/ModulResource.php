@@ -20,10 +20,10 @@ class ModulResource extends Resource
     protected static ?string $model = Modul::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Akademik';
-    protected static ?string $navigationLabel = 'Modul Pembelajaran'; // ✅ LABEL LEBIH JELAS
+    protected static ?string $navigationLabel = 'Modul Pembelajaran';
     protected static ?string $pluralLabel = 'Modul Pembelajaran';
     protected static ?string $modelLabel = 'Modul Pembelajaran';
-    protected static ?int $navigationSort = 31; // ✅ DIUBAH
+    protected static ?int $navigationSort = 31;
 
     public static function form(Form $form): Form
     {
@@ -160,8 +160,48 @@ class ModulResource extends Resource
                         'published' => 'success',
                     }),
             ])
+            ->filters([
+                Tables\Filters\SelectFilter::make('kelas_id')
+                    ->relationship('kelas', 'nama')
+                    ->label('Filter Kelas')
+                    ->searchable()
+                    ->preload(),
+
+                Tables\Filters\SelectFilter::make('course_id')
+                    ->relationship(
+                        'course',
+                        'nama',
+                        modifyQueryUsing: function (Builder $query) {
+                            if (auth()->user()->hasRole('guru')) {
+                                $guruId = auth()->user()->guru?->id;
+                                return $query->where('guru_id', $guruId);
+                            }
+                            return $query;
+                        }
+                    )
+                    ->label('Filter Course')
+                    ->searchable()
+                    ->preload(),
+
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                    ])
+                    ->label('Filter Status'),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+            ])
+            ->defaultSort('kelas_id')
+            ->groups([
+                Tables\Grouping\Group::make('kelas.nama')
+                    ->label('Kelas')
+                    ->collapsible(),
+
+                Tables\Grouping\Group::make('course.nama')
+                    ->label('Course')
+                    ->collapsible(),
             ]);
     }
 

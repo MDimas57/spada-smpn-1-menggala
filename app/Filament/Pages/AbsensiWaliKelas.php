@@ -24,6 +24,8 @@ class AbsensiWaliKelas extends Page
     public $summary = [];
     public $isAutoMode = true; // Toggle untuk mode otomatis
 
+    protected static bool $shouldRegisterNavigation = false;
+
     /**
      * Tentukan siapa yang bisa mengakses halaman ini
      */

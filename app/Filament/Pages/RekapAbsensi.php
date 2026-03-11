@@ -46,6 +46,8 @@ class RekapAbsensi extends Page
     public $totalAbsensi = 0;
     public $totalSiswa = 0;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     // ========== LIFECYCLE ==========
     public static function canAccess(): bool
     {

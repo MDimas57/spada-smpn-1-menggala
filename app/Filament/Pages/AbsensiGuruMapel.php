@@ -28,6 +28,8 @@ class AbsensiGuruMapel extends Page
     public $summary = [];
     public $selectedSchedule = null;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function canAccess(): bool
     {
         return auth()->user()->hasRole(['admin', 'guru']);
