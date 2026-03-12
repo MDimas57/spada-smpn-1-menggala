@@ -13,8 +13,7 @@ class ListNilaiUjians extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->label('Input Nilai Ujian'),
+            Actions\CreateAction::make(),
         ];
     }
 }
