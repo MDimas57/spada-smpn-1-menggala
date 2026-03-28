@@ -16,6 +16,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Filament\Tables\Filters\SelectFilter;
 
 class SiswaResource extends Resource
 {
@@ -93,6 +94,11 @@ class SiswaResource extends Resource
 
                 Tables\Columns\TextColumn::make('user.email')
                     ->label('Email'),
+            ])
+               ->filters([
+                SelectFilter::make('kelas_id')
+                    ->label('Filter Kelas')
+                    ->relationship('kelas', 'nama'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -50,10 +50,6 @@ class AdminStatsWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
 
-            Stat::make('Ekstrakurikuler', Eskul::count())
-                ->description('Eskul tersedia')
-                ->descriptionIcon('heroicon-m-trophy')
-                ->color('danger'),
         ];
     }
 }
